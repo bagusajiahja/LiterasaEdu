@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Detektif Surat Heboh!</title>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#ff2e93;--yel:#ffe600;--cyan:#00d9ff;--purp:#5b1fd1;--ink:#1c0b3a;--paper:#fffdf2;--ok:#22c55e;--bad:#ef4444}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Nunito,system-ui,sans-serif;font-weight:600;color:var(--ink);
+background:var(--purp) radial-gradient(circle at 20% 20%,#7b3df0 0 18%,transparent 19%),radial-gradient(circle at 85% 75%,#ff2e93 0 14%,transparent 15%);background-attachment:fixed;padding:14px}
+h1,h2,.big{font-family:"Bagel Fat One",Impact,sans-serif;font-weight:400;margin:0}
+.wrap{max-width:720px;margin:0 auto}
+.screen{display:none}.screen.on{display:block}
+.pop{background:var(--paper);border:4px solid var(--ink);border-radius:22px;box-shadow:8px 8px 0 var(--ink);padding:20px}
+.title{font-size:clamp(2.4rem,9vw,4rem);line-height:1;color:var(--yel);text-shadow:4px 4px 0 var(--ink),-2px -2px 0 var(--ink),2px -2px 0 var(--ink),-2px 2px 0 var(--ink);text-align:center;transform:rotate(-2deg);margin:18px 0}
+.sub{text-align:center;color:#fff;font-weight:800;font-size:1.1rem;margin-bottom:18px}
+button{font:inherit;font-weight:800;cursor:pointer;border:4px solid var(--ink);border-radius:16px;padding:12px 18px;background:var(--yel);color:var(--ink);box-shadow:5px 5px 0 var(--ink);transition:transform .08s,box-shadow .08s}
+button:hover:not(:disabled){transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
+button:active:not(:disabled){transform:translate(4px,4px);box-shadow:1px 1px 0 var(--ink)}
+button:disabled{cursor:default;opacity:.75}
+button:focus-visible{outline:4px solid var(--cyan);outline-offset:3px}
+.go{font-family:"Bagel Fat One";font-size:1.6rem;background:var(--pink);color:#fff;display:block;margin:16px auto 0;padding:14px 34px}
+.rules{margin:0;padding-left:20px;line-height:1.6}
+.hud{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}
+.chip{background:var(--cyan);border:3px solid var(--ink);border-radius:999px;padding:4px 14px;font-weight:800;box-shadow:3px 3px 0 var(--ink)}
+.chip.combo{background:var(--yel)}
+.bar{height:16px;background:#fff;border:3px solid var(--ink);border-radius:99px;overflow:hidden;margin-bottom:14px}
+.bar i{display:block;height:100%;width:100%;background:var(--ok);transform-origin:left;transition:background .3s}
+.tag{display:inline-block;background:var(--pink);color:#fff;border:3px solid var(--ink);border-radius:10px;padding:2px 12px;font-weight:800;transform:rotate(-3deg);margin-bottom:8px}
+.tag.boss{background:var(--ink);color:var(--yel)}
+.letter{background:#fff;border:3px dashed var(--ink);border-radius:12px;padding:16px;font-size:1.12rem;line-height:1.55;transform:rotate(-.6deg);animation:drop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes drop{from{transform:translateY(-40px) rotate(6deg);opacity:0}}
+.q{font-family:"Bagel Fat One";font-size:1.35rem;margin:16px 0 10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.two button{font-family:"Bagel Fat One";font-size:1.25rem;padding:16px 8px}
+.f{background:var(--pink);color:#fff}.n{background:var(--cyan)}
+.opts{display:grid;gap:10px}
+.opts button{text-align:left;background:#fff;font-weight:700}
+.opts button.right,.right{background:var(--ok)!important;color:#fff}
+.opts button.wrong,.wrong{background:var(--bad)!important;color:#fff}
+.hintbtn{margin-top:14px;font-size:.95rem;padding:8px 14px;background:#fff}
+.hint{display:none;margin-top:12px;background:var(--yel);border:3px solid var(--ink);border-radius:12px;padding:10px 14px;line-height:1.5}
+.fb{display:none;margin-top:14px;border:3px solid var(--ink);border-radius:14px;padding:12px 14px;background:#e9ffe9;line-height:1.5}
+.fb.bad{background:#ffe3e3}
+.next{display:none;margin:14px 0 0 auto}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+.score{font-size:4rem;color:var(--pink);text-align:center;line-height:1}
+.rank{font-size:2rem;text-align:center;margin:8px 0}
+.conf{position:fixed;top:-30px;font-size:1.8rem;pointer-events:none;z-index:9;animation:fall 1.8s linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(max-width:480px){.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section id="start" class="screen on">
+  <div class="title">DETEKTIF SURAT HEBOH!</div>
+  <div class="sub">Misi: bongkar surat mana yang resmi, mana yang akrab!</div>
+  <div class="pop">
+    <h2>Cara Main</h2>
+    <ol class="rules">
+      <li>Baca surat yang muncul, lalu tebak: <b>Formal</b> atau <b>Nonformal</b>.</li>
+      <li>Pilih <b>kunci petunjuk</b> yang membuktikan tebakanmu.</li>
+      <li>Jawab cepat dapat bonus, jawab benar berturut-turut dapat <b>combo</b>!</li>
+      <li>Nyawamu 3 ❤️. Salah tebak jenis surat = nyawa berkurang.</li>
+      <li>Ada 8 kartu surat + 2 kartu <b>TANTANGAN</b> (poin ganda!).</li>
+      <li>Butuh bantuan? Buka <b>Petunjuk Detektif</b>, harganya 5 poin.</li>
+    </ol>
+    <button class="go" id="startBtn">GASKEUN! 🚀</button>
+  </div>
+</section>
+
+<section id="game" class="screen">
+  <div class="hud">
+    <span class="chip" id="kartu">Kartu 1/10</span>
+    <span class="chip" id="nyawa">❤️❤️❤️</span>
+    <span class="chip combo" id="combo">Combo x1</span>
+    <span class="chip" id="skor">⭐ 0</span>
+  </div>
+  <div class="bar"><i id="timer"></i></div>
+  <div class="pop">
+    <span class="tag" id="tag">Kartu 1</span>
+    <div class="letter" id="letter"></div>
+    <div class="q" id="q1">Surat apakah ini?</div>
+    <div class="two" id="pilih">
+      <button class="f" data-v="F">🎩 FORMAL</button>
+      <button class="n" data-v="N">🎈 NONFORMAL</button>
+    </div>
+    <div id="step2" style="display:none">
+      <div class="q">Mana kunci petunjuknya?</div>
+      <div class="opts" id="opts"></div>
+    </div>
+    <button class="hintbtn" id="hintBtn">🔍 Petunjuk Detektif (-5)</button>
+    <div class="hint" id="hint">
+      <b>Tiga Petunjuk Detektif:</b><br>
+      (1) Kepada siapa surat ini ditulis, dan untuk apa?<br>
+      (2) Adakah kop, nomor, lampiran, hal, dan alamat tujuan, atau bentuknya bebas?<br>
+      (3) Bagaimana bahasanya: baku dan lugas, atau santai dan akrab?<br>
+      <i>Ingat: bahasa yang sopan belum tentu berarti surat formal.</i>
+    </div>
+    <div class="fb" id="fb"></div>
+    <button class="next" id="next">Lanjut ➜</button>
+  </div>
+</section>
+
+<section id="end" class="screen">
+  <div class="title">MISI SELESAI!</div>
+  <div class="pop">
+    <div class="rank" id="rank"></div>
+    <div class="score" id="final"></div>
+    <p style="text-align:center" id="detail"></p>
+    <button class="go" id="again">MAIN LAGI 🔁</button>
+  </div>
+</section>
+
+</div>
+
+<script>
+const CARDS=[
+{t:"Yth. Ibu Wali Kelas VII B di Tempat. Dengan hormat, saya memberitahukan bahwa putri saya, Nadia, belum dapat masuk sekolah karena demam. Terima kasih atas perhatian Ibu.",a:"F",k:"Penerima wali kelas, tujuan memberi tahu dan izin, Yth., “Dengan hormat,”, bahasa baku."},
+{t:"Hai, Rani! Kemarin aku nonton pertandingan basket sekolah, seru banget! Minggu depan kita nonton bareng lagi, yuk. Balas ya!",a:"N",k:"Penerima teman, tujuan bercerita dan mengajak, sapaan akrab, bahasa santai."},
+{t:"Nomor: 045/SMP1/XI/2026. Lampiran: -. Hal: Undangan rapat wali murid.",a:"F",k:"Ada nomor, lampiran, dan hal yang hanya dimiliki surat formal."},
+{t:"Kepada sahabatku Raka, semoga kamu selalu sehat. Terima kasih atas hadiah yang kamu berikan. Aku sangat senang menerimanya.",a:"N",k:"Bahasanya sopan, tetapi penerima sahabat, tujuan ucapan terima kasih pribadi, tanpa kop, nomor, atau hal."},
+{t:"Yth. Bapak Wali Kelas. Saya Dimas dari kelas VII A memohon izin mengikuti lomba pidato pada hari Rabu. Terima kasih.",a:"F",k:"Surat singkat tanpa kop, tetapi penerima wali kelas, tujuan izin resmi, bahasa baku."},
+{t:"Nenek tersayang, di sini Dimas baik-baik saja. Nenek jangan lupa minum obat, ya. Salam sayang dari Dimas.",a:"N",k:"Penerima nenek, tujuan memberi kabar dan perhatian, sapaan dan salam penutup akrab."},
+{t:"Yth. Bapak/Ibu Orang Tua Murid. Sehubungan dengan kegiatan karyawisata, kami memberitahukan bahwa keberangkatan dijadwalkan pukul 06.30 WIB. Demikian pemberitahuan ini kami sampaikan.",a:"F",k:"Penerima orang tua murid, tujuan pemberitahuan resmi, Yth., ungkapan khas formal."},
+{t:"Selamat ulang tahun, Dinda! Semoga makin pintar dan sehat selalu. Nanti pulang sekolah kita makan bakso bareng ya!",a:"N",k:"Penerima teman, tujuan ucapan selamat, bahasa akrab."},
+{t:"Yth. Kakek dan Nenek di Yogyakarta. Semoga Kakek dan Nenek senantiasa sehat dan dalam lindungan Tuhan. Kami sekeluarga di sini baik-baik saja. Salam hormat dari cucumu, Dimas.",a:"N",k:"Bahasanya sangat hormat, tetapi penerima keluarga, tujuan memberi kabar, dan tidak ada nomor, lampiran, hal.",boss:1},
+{t:"Selamat siang, Bu. Saya Dimas dari kelas VII A. Saya mohon izin tidak mengikuti pelajaran hari ini karena ada kegiatan keluarga. Terima kasih, Bu. (dikirim melalui surel kepada guru)",a:"F",k:"Walaupun tanpa kop atau nomor, penerima guru, tujuan izin resmi, dan bahasa baku serta hormat.",boss:1}
+];
+const $=id=>document.getElementById(id);
+let order,i,skor,nyawa,combo,benar,kunciBenar,locked,tLeft,tick,tipeOK,hinted,audio;
+
+function beep(f,d=.12,type="square"){try{audio=audio||new (window.AudioContext||window.webkitAudioContext)();
+const o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.value=f;g.gain.value=.08;
+o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+d)}catch(e){}}
+function confetti(n=24){const e=["🎉","⭐","💥","✨","🎈","🔥"];for(let k=0;k<n;k++){const s=document.createElement("span");
+s.className="conf";s.textContent=e[k%e.length];s.style.left=Math.random()*100+"vw";s.style.animationDelay=Math.random()*.5+"s";
+document.body.appendChild(s);setTimeout(()=>s.remove(),2600)}}
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===id))}
+function shuffle(a){return a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1])}
+
+function start(){
+  const reg=shuffle(CARDS.filter(c=>!c.boss)),boss=CARDS.filter(c=>c.boss);
+  order=[...reg,...boss];i=0;skor=0;nyawa=3;combo=0;benar=0;show("game");load();
+}
+function hud(){$("kartu").textContent="Kartu "+(i+1)+"/"+order.length;$("nyawa").textContent="❤️".repeat(nyawa)+"🖤".repeat(3-nyawa);
+$("combo").textContent="Combo x"+Math.max(1,combo);$("skor").textContent="⭐ "+skor}
+function load(){
+  const c=order[i];locked=false;tipeOK=false;hinted=false;
+  $("tag").textContent=c.boss?"👑 KARTU TANTANGAN (poin x2)":"Kartu surat";$("tag").className="tag"+(c.boss?" boss":"");
+  const l=$("letter");l.textContent=c.t;l.style.animation="none";l.offsetHeight;l.style.animation="";
+  $("pilih").style.display="grid";$("q1").style.display="block";$("step2").style.display="none";
+  $("fb").style.display="none";$("fb").className="fb";$("next").style.display="none";
+  $("hint").style.display="none";$("hintBtn").style.display="inline-block";
+  document.querySelectorAll("#pilih button").forEach(b=>b.disabled=false);
+  hud();startTimer(20);
+}
+function startTimer(s){clearInterval(tick);tLeft=s;const bar=$("timer").style;bar.transform="scaleX(1)";bar.background="var(--ok)";
+  tick=setInterval(()=>{tLeft-=.1;bar.transform="scaleX("+Math.max(0,tLeft/s)+")";
+  if(tLeft<s*.3)bar.background="var(--bad)";if(tLeft<=0){clearInterval(tick);timeUp()}},100)}
+function timeUp(){if(locked)return;if(!tipeOK){salahTipe(true)}else{pilihKunci(null)}}
+function bonus(){return Math.round(Math.max(0,tLeft)/2)}
+
+function pilihTipe(v){
+  if(locked)return;const c=order[i];clearInterval(tick);
+  if(v===c.a){tipeOK=true;beep(660);beep(880,.15);
+    skor+=(10+bonus())*(c.boss?2:1);combo++;if(combo>=3)confetti(10);hud();
+    $("pilih").style.display="none";$("q1").style.display="none";
+    const pool=shuffle(CARDS.filter(x=>x!==c));
+    const opp=pool.find(x=>x.a!==c.a),same=pool.find(x=>x.a===c.a&&x!==opp);
+    const opts=shuffle([c,opp,same||pool[0]]);
+    $("opts").innerHTML="";
+    opts.forEach(o=>{const b=document.createElement("button");b.textContent=o.k;b.onclick=()=>pilihKunci(o===c?true:false,b);$("opts").appendChild(b)});
+    $("step2").style.display="block";startTimer(20);
+  }else salahTipe(false);
+}
+function salahTipe(habis){
+  locked=true;const c=order[i];beep(150,.3,"sawtooth");nyawa--;combo=0;hud();
+  document.querySelectorAll("#pilih button").forEach(b=>{b.disabled=true;if(b.dataset.v===c.a)b.classList.add("right")});
+  $("letter").classList.add("shake");setTimeout(()=>$("letter").classList.remove("shake"),400);
+  fin((habis?"⏰ Waktu habis! ":"💥 Oops, belum tepat! ")+"Ini surat <b>"+(c.a==="F"?"FORMAL":"NONFORMAL")+"</b>.<br>🔑 "+c.k,true);
+}
+function pilihKunci(ok,btn){
+  if(locked)return;locked=true;clearInterval(tick);const c=order[i];
+  document.querySelectorAll("#opts button").forEach(b=>{b.disabled=true;if(b.textContent===c.k)b.classList.add("right")});
+  if(ok){benar++;skor+=(10+bonus())*(c.boss?2:1);beep(988,.2);confetti(14);
+    fin("🎯 Detektif jenius! Tebakan dan kuncinya cocok.<br>🔑 "+c.k,false)}
+  else{if(btn)btn.classList.add("wrong");combo=0;beep(200,.25,"sawtooth");
+    fin("😅 Jenis suratnya benar, tapi kuncinya meleset.<br>🔑 "+c.k,true)}
+}
+function fin(html,bad){
+  skor=Math.max(0,skor);hud();$("hintBtn").style.display="none";$("hint").style.display="none";
+  const f=$("fb");f.innerHTML=html;f.className="fb"+(bad?" bad":"");f.style.display="block";
+  const last=i===order.length-1||nyawa<=0;$("next").textContent=last?"Lihat hasil 🏆":"Lanjut ➜";$("next").style.display="block";$("next").focus();
+}
+function next(){if(nyawa<=0||i>=order.length-1){return end()}i++;load()}
+function end(){
+  clearInterval(tick);show("end");const maks=order.length;
+  const r=nyawa<=0?["🥲 Detektif Magang","Jangan menyerah, coba lagi!"]:skor>=330?["👑 Detektif Legendaris","Surat apa pun, kamu bongkar!"]:skor>=220?["🕵️ Detektif Handal","Mantap, tinggal asah sedikit lagi!"]:["🔍 Detektif Pemula","Baca lagi kop, nomor, dan bahasanya!"];
+  $("rank").textContent=r[0];$("final").textContent=skor;
+  $("detail").innerHTML=r[1]+"<br>Kunci tepat: <b>"+benar+"</b> dari "+i+(nyawa<=0?"+1":"")+" kartu dimainkan. Sisa nyawa: "+"❤️".repeat(nyawa);
+  if(nyawa>0)confetti(40);
+}
+$("startBtn").onclick=start;$("again").onclick=start;$("next").onclick=next;
+document.querySelectorAll("#pilih button").forEach(b=>b.onclick=()=>pilihTipe(b.dataset.v));
+$("hintBtn").onclick=()=>{if(hinted||locked)return;hinted=true;skor=Math.max(0,skor-5);hud();$("hint").style.display="block"};
+</script>
+</body>
+</html>
