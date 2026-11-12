@@ -41,7 +41,7 @@ L.reveal=function(root,sel){
     es.forEach(function(e){if(!e.isIntersecting)return;var t=e.target,d=(k++)*70;L._io.unobserve(t);
       t.style.transitionDelay=d+'ms';t.classList.add('rv-in');
       setTimeout(function(){t.classList.remove('rv','rv-in');t.style.transitionDelay=''},d+900)})},
-    {threshold:.1,rootMargin:'0px 0px -3% 0px'});
+    {threshold:0,rootMargin:'0px 0px -2% 0px'});
   root.querySelectorAll(sel).forEach(function(el){if(el._rv)return;el._rv=1;el.classList.add('rv');L._io.observe(el)})};
 
 /* ledakan emoji dari sebuah elemen / titik */
