@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#6a4cff"><link rel="apple-touch-icon" href="icon-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<title>Kantor Pos Kelas | Literasa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="literasa.css">
+<style>
+/* ===== Kantor Pos Kelas — tampilan baru ===== */
+body{padding-bottom:0}
+h2{font:800 1.5rem/1.15 var(--f-h);margin:8px 0 6px}h3{font:700 1.05rem var(--f-h);margin:18px 0 6px}
+p{margin:.5em 0}.mut{color:var(--mut);font-size:.92rem}
+a{color:var(--v);font-weight:700}
+
+/* ---- header ---- */
+header{position:relative;overflow:hidden;color:#fff;background:var(--g1);border-radius:0 0 36px 36px;
+  padding:18px max(20px,calc((100% - 820px)/2)) 26px;box-shadow:0 26px 44px -26px rgba(106,76,255,.85)}
+header::before,header::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.13);pointer-events:none}
+header::before{width:240px;height:240px;right:-70px;top:-100px;animation:float 9s ease-in-out infinite}
+header::after{width:130px;height:130px;left:-40px;bottom:-60px;animation:float 11s ease-in-out -4s infinite}
+header>*{position:relative;z-index:1}
+.back{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.2);backdrop-filter:blur(6px);color:#fff;text-decoration:none;
+  font:700 .85rem var(--f-h);padding:6px 14px;border-radius:999px;transition:transform .3s var(--spring),background .2s}
+.back:hover{background:rgba(255,255,255,.32);transform:translateX(-3px)}
+header h1{margin:14px 0 2px;font:800 clamp(1.9rem,7vw,2.7rem)/1.05 var(--f-h);letter-spacing:-.03em;color:#fff}
+header h1 em{font-style:normal;display:inline-block;animation:wig 3s ease-in-out infinite;transform-origin:70% 80%}
+@keyframes wig{0%,60%,100%{transform:rotate(0)}70%{transform:rotate(-14deg) scale(1.15)}80%{transform:rotate(10deg) scale(1.15)}90%{transform:rotate(-6deg)}}
+header p{margin:0 0 14px;color:#f4ecff;font-weight:500}
+.plane{position:absolute!important;top:16px;font-size:1.6rem;animation:fly 10s linear infinite;z-index:0!important;opacity:.9}
+@keyframes fly{from{left:-12%;transform:translateY(0) rotate(8deg)}50%{transform:translateY(18px) rotate(-4deg)}to{left:108%;transform:translateY(-6px) rotate(8deg)}}
+.fl{position:absolute!important;font-size:1.3rem;opacity:.75;animation:float 6s ease-in-out infinite;z-index:0!important}
+.st{display:flex;gap:8px;flex-wrap:wrap}
+.stamp{display:flex;align-items:center;gap:6px;padding:5px 12px 5px 6px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);
+  font:700 .74rem var(--f-h);color:#e9dfff;transition:.4s var(--spring)}
+.stamp i{font-style:normal;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.2);font-size:.9rem;filter:grayscale(1);opacity:.7}
+.stamp.on{background:#fff;color:var(--ink);border-color:#fff;box-shadow:0 8px 16px -8px rgba(0,0,0,.4);animation:pop .6s var(--spring)}
+.stamp.on i{background:var(--g3);filter:none;opacity:1}
+
+main{max-width:820px;margin:0 auto;padding:20px 16px 130px}
+section{display:none}section.a{display:block;animation:inn .45s both}
+
+/* ---- kartu & akordeon ---- */
+.card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:16px 18px;margin:14px 0;box-shadow:var(--sh-s)}
+details{background:#fff;border:1px solid var(--line);border-radius:22px;margin:12px 0;padding:0 18px 1px;box-shadow:var(--sh-s);overflow:hidden;transition:box-shadow .3s,border-color .3s}
+details[open]{box-shadow:var(--sh);border-color:#d9d0ff}
+summary{list-style:none;cursor:pointer;font:700 1.02rem var(--f-h);margin:0 -18px;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;transition:background .2s}
+summary:hover{background:var(--tint)}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";flex:none;width:9px;height:9px;border-right:3px solid var(--v);border-bottom:3px solid var(--v);transform:rotate(45deg);margin:-4px 4px 0 0;transition:transform .35s var(--spring)}
+details[open]>summary::after{transform:rotate(-135deg);margin-top:4px}
+details[open]>*:not(summary){animation:inn .4s both}
+details .card{background:var(--bg);box-shadow:none}
+
+/* ---- tabel ---- */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:18px;margin:12px 0;background:#fff}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:.9rem}
+th,td{padding:9px 12px;text-align:left;vertical-align:top;border-top:1px solid var(--line)}
+tr:first-child th{border-top:0}
+th{background:var(--tint);color:var(--v);font:800 .8rem var(--f-h);letter-spacing:.03em}
+tr:not(:first-child):hover td{background:#faf8ff}
+ul,ol{padding-left:1.3em}li{margin:.3em 0}
+.fig{width:100%;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:var(--sh-s)}
+
+/* ---- kuis ---- */
+.q{counter-reset:o;background:#fff;border:1px solid var(--line);border-radius:22px;padding:16px;margin:14px 0;box-shadow:var(--sh-s)}
+.q>p:first-child{margin:0 0 12px;font-size:1.02rem}
+.q>p:first-child>b:first-child{display:inline-grid;place-items:center;min-width:30px;height:30px;padding:0 6px;border-radius:10px;background:var(--g1);color:#fff;margin-right:8px;font:800 .85rem var(--f-h)}
+.o{counter-increment:o;appearance:none;display:flex;align-items:center;gap:12px;width:100%;text-align:left;margin:8px 0;padding:11px 14px;
+  border:2px solid var(--line);border-radius:16px;background:#fff;color:var(--ink);font:600 .96rem/1.4 var(--f-b);cursor:pointer;position:relative;overflow:hidden;
+  transition:transform .25s var(--spring),border-color .2s,background .2s,box-shadow .2s}
+.o::before{content:counter(o,upper-alpha);flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--tint);color:var(--v);font:800 .82rem var(--f-h);transition:.3s var(--spring)}
+.o:hover:not(:disabled){border-color:var(--v2);transform:translateX(4px);background:#faf8ff}
+.o:active:not(:disabled){transform:scale(.98)}
+.o.s{border-color:var(--v);background:var(--tint)}.o.s::before{background:var(--v);color:#fff}
+.o.ok{border-color:var(--ok);background:#e3faf1;animation:pop .5s var(--spring)}.o.ok::before{content:"✓";background:var(--ok);color:#fff}
+.o.no{border-color:var(--bad);background:#ffe9ed;animation:shake .45s}.o.no::before{content:"✕";background:var(--bad);color:#fff}
+.o:disabled{cursor:default}
+.ex{font-size:.9rem;color:var(--ink2);margin:8px 0 0;padding:0}.ex:not(:empty){background:var(--tint);border-radius:14px;padding:9px 13px;animation:inn .4s both}
+.res{background:var(--g1);color:#fff;border-radius:22px;padding:16px 18px;margin:14px 0;box-shadow:0 18px 30px -18px rgba(106,76,255,.9);animation:pop .6s var(--spring)}
+.res .btn{background:#fff;color:var(--v);margin-left:10px;padding:7px 16px;font-size:.85rem;box-shadow:none}
+
+/* ---- form ---- */
+input,textarea{width:100%;padding:11px 14px;margin:6px 0;border:2px solid var(--line);border-radius:16px;font:500 1rem var(--f-b);background:#fff;color:var(--ink);transition:border-color .2s,box-shadow .2s}
+input:focus,textarea:focus{outline:0;border-color:var(--v);box-shadow:0 0 0 4px rgba(106,76,255,.15)}
+
+/* ---- dok navigasi bawah ---- */
+#nav{display:none}
+.bn{position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:9;display:flex;gap:4px;width:min(92vw,400px);padding:6px;
+  background:rgba(255,255,255,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:28px;box-shadow:0 20px 40px -14px rgba(40,20,120,.45)}
+.bn button{flex:1;border:0;background:transparent;border-radius:22px;font:700 .74rem var(--f-h);color:var(--mut);padding:7px 0 6px;cursor:pointer;transition:background .3s,color .3s,transform .3s var(--spring)}
+.bn button span{display:block;font-size:1.35rem;transition:transform .4s var(--spring)}
+.bn button.a{background:var(--g1);color:#fff;box-shadow:0 10px 18px -8px rgba(106,76,255,.8)}
+.bn button.a span{transform:translateY(-2px) scale(1.2) rotate(-6deg)}
+.bn button:active{transform:scale(.92)}
+
+/* ---- peta belajar (beranda) ---- */
+.hero-card{position:relative;overflow:hidden;color:#fff;background:var(--g1);border-radius:30px;padding:22px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;box-shadow:0 28px 44px -26px rgba(106,76,255,.95)}
+.hero-card::before{content:"";position:absolute;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.12);right:-60px;top:-80px;animation:float 8s ease-in-out infinite}
+.hero-card h2{color:#fff;margin:0;font-size:1.35rem}.hero-card p{margin:4px 0 0;color:#f4ecff;font-size:.95rem}
+.hero-card>*{position:relative}
+.rw{position:relative;width:92px;height:92px}
+.ring{position:absolute;inset:0;border-radius:50%;background:conic-gradient(#ffd75e calc(var(--p)*1%),rgba(255,255,255,.28) 0);transition:--p 1.3s cubic-bezier(.3,.8,.3,1);
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 11px),#000 calc(100% - 10px));mask:radial-gradient(farthest-side,transparent calc(100% - 11px),#000 calc(100% - 10px))}
+.rw b{position:absolute;inset:0;display:grid;place-items:center;font:800 1.35rem var(--f-h)}
+.bub{grid-column:1/-1;display:flex;gap:12px;align-items:center;background:rgba(255,255,255,.17);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:10px 14px;font-size:.92rem;line-height:1.45}
+.bub .av{font-size:1.9rem;animation:bob 2s ease-in-out infinite}.bub b{display:block;font:700 .78rem var(--f-h);color:#ffe9a3;letter-spacing:.02em}
+
+.path{position:relative;margin:26px 0 12px;padding:4px 0}
+.path::before{content:"";position:absolute;left:50%;top:14px;bottom:14px;width:4px;margin-left:-2px;border-radius:4px;
+  background:repeating-linear-gradient(#b9a9ff 0 10px,transparent 10px 20px);background-size:4px 20px;animation:flow 1.2s linear infinite;opacity:.7}
+@keyframes flow{to{background-position:0 20px}}
+.nd{--c:#6a4cff;position:relative;display:flex;align-items:center;gap:13px;width:88%;margin:18px 0;background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:var(--sh-s);
+  padding:12px 16px 12px 12px;cursor:pointer;text-align:left;font:inherit;color:var(--ink);transition:transform .35s var(--spring),box-shadow .3s}
+.nd:nth-child(even){margin-left:auto;flex-direction:row-reverse;text-align:right}
+.nd:nth-child(1){--c:#6a4cff}.nd:nth-child(2){--c:#ff4fa3}.nd:nth-child(3){--c:#0ea5a0}.nd:nth-child(4){--c:#3b82f6}.nd:nth-child(5){--c:#f97316}
+.nd:hover{transform:translateY(-5px) rotate(-.8deg);box-shadow:var(--sh)}
+.nd:nth-child(even):hover{transform:translateY(-5px) rotate(.8deg)}
+.nd .ic{flex:none;width:58px;height:58px;border-radius:20px;display:grid;place-items:center;font-size:1.8rem;background:var(--c);box-shadow:0 12px 18px -10px var(--c);transform:rotate(-6deg);transition:transform .4s var(--spring)}
+.nd:hover .ic{transform:rotate(6deg) scale(1.1)}
+.nd .tx{flex:1;min-width:0}.nd .tx b{display:block;font:700 1rem/1.25 var(--f-h)}.nd small{display:block;color:var(--mut);font-size:.82rem;line-height:1.35;margin-top:2px}
+.nd.done{background:#f1fcf8;border-color:#bdeedd}.nd.done .ic{background:var(--ok);animation:pop .6s var(--spring)}
+.nd.cur{border-color:var(--c);animation:pulse 2s ease-out infinite}
+.nd.cur::after{content:"Lanjut ▸";position:absolute;top:-11px;right:14px;background:var(--c);color:#fff;font:800 .68rem var(--f-h);padding:3px 10px;border-radius:999px;animation:bob 1.6s ease-in-out infinite}
+.nd:nth-child(even).cur::after{right:auto;left:14px}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--c) 45%,transparent),var(--sh-s)}80%,100%{box-shadow:0 0 0 18px transparent,var(--sh-s)}}
+
+/* ---- level ---- */
+.lb{position:relative;overflow:hidden;border-radius:30px;padding:22px 22px 20px;margin:12px 0 14px;color:#fff;box-shadow:var(--sh)}
+.lb::before,.lb::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.15);pointer-events:none}
+.lb::before{width:170px;height:170px;right:-46px;top:-64px;animation:float 8s ease-in-out infinite}
+.lb::after{width:90px;height:90px;right:64px;bottom:-44px;animation:float 10s ease-in-out -3s infinite}
+.lb .bg{display:inline-block;font-size:2.5rem;line-height:1;animation:bob 2s ease-in-out infinite}
+.lb h2{margin:6px 0 0!important;color:#fff}.lb p{position:relative;max-width:30em}
+.stp{display:flex;gap:4px;margin:14px 0;padding:5px;background:#fff;border:1px solid var(--line);border-radius:999px;box-shadow:var(--sh-s)}
+.stp button{flex:1;border:0;background:transparent;border-radius:999px;font:700 .82rem var(--f-h);padding:10px 4px;color:var(--mut);cursor:pointer;transition:background .3s,color .3s,transform .3s var(--spring)}
+.stp button:active{transform:scale(.94)}
+.stp .a{background:var(--g1);color:#fff;box-shadow:0 10px 16px -8px rgba(106,76,255,.8)}
+.stp .dn{color:var(--ok)}.stp .dn::before{content:"✓ "}
+.pn{display:none}.pn.a{display:block;animation:inn .4s both}
+.nx{margin:26px 0;text-align:center}.nx .btn{padding:14px 28px}
+.nx .btn::after{content:"";}
+.btn.sm{box-shadow:0 8px 14px -8px rgba(106,76,255,.8)}
+
+/* ---- lencana ---- */
+.g4{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.bd{position:relative;overflow:hidden;text-align:center;background:#fff;border:1px solid var(--line);border-radius:26px;padding:20px 10px 16px;box-shadow:var(--sh-s)}
+.bd .md{display:grid;place-items:center;width:72px;height:72px;margin:0 auto 8px;border-radius:50%;font-size:2.1rem;background:var(--tint);filter:grayscale(1);opacity:.6}
+.bd b{display:block;font:800 1rem var(--f-h)}.bd small{display:block;color:var(--mut);font-size:.8rem;margin-top:3px;line-height:1.35}
+.bd.on{border-color:#ffd978;background:linear-gradient(180deg,#fffbe9,#fff)}
+.bd.on .md{background:var(--g3);filter:none;opacity:1;box-shadow:0 14px 22px -10px #ff9f1c,0 0 0 6px #ffe9a8;animation:pop .7s var(--spring)}
+.bd.on::after{content:"";position:absolute;top:0;bottom:0;width:40%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent);animation:shine 3.4s ease-in-out infinite}
+.lock{display:inline-block;font-size:.9rem}
+
+/* ---- amplop pembuka ---- */
+#ov{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 50% 28%,rgba(106,76,255,.9),rgba(22,12,70,.95) 70%);backdrop-filter:blur(8px);display:none;place-items:center;padding:20px}
+#ov.on{display:grid;animation:inn .3s both}
+.evw{text-align:center;color:#fff;margin-top:110px}.evw #oh{font:700 1rem var(--f-h);animation:bob 1.6s ease-in-out infinite}
+.ev{position:relative;width:min(320px,84vw);height:200px;margin:0 auto 18px;cursor:pointer;perspective:900px;filter:drop-shadow(0 30px 30px rgba(0,0,0,.4))}
+.ev>div{position:absolute}.ev .bk{inset:0;background:#ff9d3c;border-radius:14px}
+.ev .lt{left:7%;right:7%;top:64px;height:170px;background:#fff;border-radius:10px;padding:16px;color:var(--ink);transition:transform .8s .45s var(--spring);z-index:2;overflow:hidden;text-align:left;border-top:6px solid var(--pink)}
+.ev .lt b{font:800 1.15rem var(--f-h)}.ev .lt p{font-size:.88rem;margin:6px 0;color:var(--ink2)}
+.ev .fr{inset:0;background:#ffbb54;border-radius:14px;clip-path:polygon(0 38%,50% 74%,100% 38%,100% 100%,0 100%);z-index:3}
+.ev .fl2{left:0;right:0;top:0;height:148px;background:#ffae3a;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .55s;z-index:4;border-radius:14px 14px 0 0}
+.ev .sl{left:calc(50% - 22px);top:98px;width:44px;height:44px;border-radius:50%;background:var(--g1);border:3px solid #fff;display:grid;place-items:center;z-index:5;transition:opacity .3s;font-size:1.2rem;box-shadow:0 8px 14px rgba(0,0,0,.3)}
+.ev.open .fl2{transform:rotateX(180deg);z-index:1}.ev.open .sl{opacity:0}.ev.open .lt{transform:translateY(-162px)}
+.ev:not(.open){animation:bob 1.6s ease-in-out infinite}
+#ob{visibility:hidden}.ev.open~#ob{visibility:visible;animation:pop .6s var(--spring)}
+
+/* ---- stempel lencana baru ---- */
+.sg{position:fixed;inset:0;z-index:98;display:grid;place-items:center;pointer-events:none}
+.sg div{background:#fff;border-radius:28px;padding:20px 34px;text-align:center;font:800 1.5rem var(--f-h);color:var(--ink);box-shadow:0 0 0 6px #ffd978,0 40px 60px -20px rgba(0,0,0,.5);animation:slam .55s var(--spring) both,out .4s 2.1s forwards}
+.sg small{display:inline-block;background:var(--g1);color:#fff;border-radius:999px;padding:2px 14px;font:800 .7rem var(--f-h);letter-spacing:.1em;margin-bottom:6px}
+.sg span{display:block;font-size:2.6rem;margin-bottom:2px}
+@keyframes slam{from{transform:scale(2.6) rotate(-24deg);opacity:0}to{transform:scale(1) rotate(-4deg);opacity:1}}@keyframes out{to{opacity:0;transform:scale(.9) translateY(-20px)}}
+
+/* ---- game layar penuh ---- */
+#gm{position:fixed;inset:0;z-index:120;background:#120d2e;display:none;flex-direction:column}
+#gm.on{display:flex;animation:sheet .45s var(--spring) both}
+@keyframes sheet{from{transform:translateY(60px);opacity:0}}
+#gm .gb{display:flex;align-items:center;gap:10px;padding:10px 14px;color:#fff;font:700 1rem var(--f-h)}
+#gm .gb b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#gm .gb .btn{background:rgba(255,255,255,.16);box-shadow:none}
+#gm iframe{flex:1;border:0;width:100%;background:#fff}
+.gcard{text-align:center;background:linear-gradient(160deg,#fff,#f4efff)}.gcard .big{font-size:2.8rem;line-height:1.2;animation:bob 2.4s ease-in-out infinite}
+.gcard .btn{margin-top:12px;font-size:1.05rem;padding:14px 26px}
+@media(max-width:480px){.nd{width:94%}.hero-card{grid-template-columns:1fr;justify-items:start}.rw{width:84px;height:84px}}
+</style></head><body>
+<script src="literasa.js"></script>
+<header><span class="plane" aria-hidden="true">✈️</span><span class="fl" style="left:62%;top:40px;animation-delay:-2s" aria-hidden="true">✉️</span><span class="fl" style="right:7%;top:92px;animation-delay:-4s" aria-hidden="true">⭐</span><a class="back" href="index.html">← Beranda Literasa</a><h1><em>💌</em> Kantor Pos Kelas</h1><p>Petualangan Surat Formal dan Nonformal ✨ SMP Kelas VII</p><div class="st" id="stamps"></div></header>
+<nav id="nav"></nav>
+<div id="gm" role="dialog" aria-modal="true" aria-label="Game"><div class="gb"><b id="gt"></b><button class="btn sm" id="gx">✕ Tutup</button></div><iframe id="gf" title="Game" allow="autoplay"></iframe></div>
+<div id="ov"><div class="evw"><div class="ev" id="ev"><div class="bk"></div><div class="lt"><b id="ot"></b><p id="ox"></p></div><div class="fr"></div><div class="fl2"></div><div class="sl">💌</div></div><p id="oh">Ketuk amplop untuk membuka ✉️</p><button class="btn" id="ob">Masuk</button></div></div>
+<main>
+<section id="home"></section>
+<section id="peta"></section>
+<section id="materi"></section>
+<section id="bedah"></section>
+<section id="latihan"></section>
+<section id="pilah"></section>
+<section id="misi"></section>
+<section id="asesmen"></section>
+<section id="lencana"></section>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+let P={};try{P=JSON.parse(localStorage.getItem('kps')||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem('kps',JSON.stringify(P))}catch(e){}};
+const tb=(h,r)=>'<div class="tw"><table><tr>'+h.map(x=>'<th>'+x+'</th>').join('')+'</tr>'+r.map(a=>'<tr>'+a.map(x=>'<td>'+x+'</td>').join('')+'</tr>').join('')+'</table></div>';
+const FN=['Formal','Nonformal'];
+const BADGES=[['l1','Detektif Muda'],['l2','Ahli Bedah Surat'],['l3','Detektif Bahasa'],['l4','Petugas Pos Teladan']];
+
+/* ===== MESIN KUIS ===== */
+function quiz(el,items,fb,done){
+  el.innerHTML='';const ans=[];let fin=false;
+  const qs=items.map((it,i)=>{
+    const d=document.createElement('div');d.className='q';d.innerHTML='<p><b>'+(i+1)+'.</b> '+it[0]+'</p>';
+    it[1].forEach((t,j)=>{const b=document.createElement('button');b.className='o';b.textContent=t;
+      b.onclick=()=>{if(d.dataset.l)return;ans[i]=j;d.querySelectorAll('.o').forEach(x=>x.classList.remove('s'));b.classList.add('s');if(fb)rev(i);upd()};d.append(b)});
+    const e=document.createElement('p');e.className='ex';d.append(e);el.append(d);return d});
+  function rev(i){const d=qs[i],it=items[i];d.dataset.l=1;if(fb&&ans[i]==it[2])Lit.burst(d.querySelectorAll('.o')[it[2]],9);
+    d.querySelectorAll('.o').forEach((b,j)=>{if(j==it[2])b.classList.add('ok');else if(j==ans[i])b.classList.add('no')});
+    if(it[3])d.querySelector('.ex').textContent=(ans[i]==it[2]?'Benar. ':'Belum tepat. ')+it[3]}
+  Lit.reveal(el);
+  const bar=document.createElement('div');el.append(bar);
+  const go=document.createElement('button');go.className='btn';go.textContent='Periksa jawaban';go.disabled=true;
+  if(!fb)bar.append(go);
+  function upd(){const all=items.every((_,i)=>ans[i]!==undefined);go.disabled=!all;if(fb&&all)finish()}
+  go.onclick=()=>{items.forEach((_,i)=>rev(i));finish()};
+  function finish(){if(fin)return;fin=true;go.remove();
+    const s=items.filter((it,i)=>ans[i]==it[2]).length;
+    const r=document.createElement('div');r.className='res';r.innerHTML='<b>Skor: '+s+' dari '+items.length+'</b> ';
+    const rb=document.createElement('button');rb.className='btn';rb.textContent='Ulangi';rb.onclick=()=>quiz(el,items,fb,done);r.append(rb);bar.append(r);
+    done&&done(s,items.length)}
+}
+const award=(k,s,n)=>{const old=P[k]||0,v=Math.max(old,Math.round(100*s/n));P[k]=v;save();stamps();if(100*s/n>=75){confetti();if(old<75)stampPop(k)}};
+const BIC=['🕵️','🔬','🔎','🏆'];
+function stamps(){if(window.renderL)renderL();if(window.renderH)renderH();$('#stamps').innerHTML=BADGES.map((b,i)=>'<div class="stamp'+((P[b[0]]||0)>=75?' on':'')+'"><i>'+BIC[i]+'</i>'+b[1]+'</div>').join('')}
+
+/* ===== DATA ===== */
+const MATERI=[
+['M1 Apa sih surat itu?','<p>Surat adalah sarana komunikasi tertulis untuk menyampaikan maksud, informasi, atau perasaan kepada orang atau lembaga lain. Fungsinya: menyampaikan pesan kepada pihak yang jauh, menjadi bukti tertulis, menjadi arsip, dan menjaga hubungan baik.</p>'+tb(['Tujuan','Contoh situasi'],[['Memberi kabar','Bercerita liburan kepada sahabat atau nenek'],['Memberitahukan','Sekolah memberi tahu jadwal kegiatan kepada orang tua'],['Memohon','Murid memohon izin tidak masuk; OSIS memohon izin memakai aula'],['Mengundang','Sekolah mengundang wali murid rapat; undangan ulang tahun'],['Menyampaikan perasaan','Ucapan terima kasih, selamat, atau rindu']])+'<p class="mut">Jeda Detektif: tulis pengertian surat dengan kalimatmu sendiri dan dua tujuan surat.</p>'],
+['M2 Jenis surat: formal dan nonformal','<p>Jenis surat ditentukan oleh penerima dan tujuannya. Kesopanan bukan penentu, sebab surat nonformal pun harus santun.</p>'+tb(['Aspek','Formal','Nonformal'],[['Penerima','Lembaga atau orang yang dihormati (kepala sekolah, wali kelas, wali murid)','Teman, sahabat, keluarga'],['Tujuan','Izin, permohonan, pemberitahuan, undangan resmi','Kabar, cerita, ucapan, undangan santai'],['Struktur','Lengkap: kop, nomor, lampiran, hal, alamat tujuan, dst.','Sederhana dan bebas'],['Bahasa','Baku, lugas, sangat hormat','Santai dan akrab, tidak kasar']])],
+['M3 Struktur surat formal (10 unsur)','<p>Pahami lewat fungsinya: apa akibatnya bila bagian itu hilang?</p>'+tb(['No','Unsur','Fungsi','Jika hilang'],[[1,'Kop surat','Identitas lembaga pengirim','Tidak tahu surat dari lembaga mana'],[2,'Nomor surat','Penanda urutan arsip','Sulit dicari dan diarsipkan'],[3,'Lampiran','Jumlah berkas yang dikirim (“-” bila tidak ada)','Tidak tahu ada berkas yang harus diperiksa'],[4,'Hal (perihal)','Pokok isi dalam satu frasa','Harus membaca semuanya dulu'],[5,'Tempat dan tanggal','Tempat dan waktu surat dibuat','Batas waktu menjadi kabur'],[6,'Alamat tujuan','Kepada siapa surat ditujukan','Tidak jelas siapa yang menanggapi'],[7,'Salam pembuka','Sapaan hormat','Surat terasa tiba-tiba'],[8,'Isi surat','Pembuka, rincian, penutup','Maksud tidak tersampaikan'],[9,'Salam penutup','Penutup yang hormat','Surat berhenti mendadak'],[10,'Tanda tangan dan nama terang','Pengesahan dan identitas','Surat tidak sah, penulis tidak diketahui']])],
+['M4 Struktur surat nonformal (7 unsur)','<p>Bentuknya bebas, tetapi tiap bagian tetap punya fungsi.</p>'+tb(['No','Unsur','Contoh','Jika hilang'],[[1,'Tempat dan tanggal','Bandung, 9 November 2026','Tidak tahu kapan ditulis'],[2,'Salam pembuka','Halo, Dinda!','Terasa dingin dan tiba-tiba'],[3,'Pembuka isi','Apa kabar? Semoga sehat, ya.','Kurang ramah'],[4,'Isi surat','Aku mau cerita, kelasku juara satu.','Tidak ada pesan'],[5,'Penutup isi','Kabari aku ya kalau bisa datang.','Tidak tahu yang diharapkan'],[6,'Salam penutup','Salam sayang,','Berhenti mendadak'],[7,'Nama pengirim','Rani','Tidak tahu penulisnya']])],
+['M5 Membandingkan struktur (Kembar tapi beda)','<p><b>Ada pada kedua jenis:</b> tempat dan tanggal, salam pembuka, isi surat, salam penutup, nama pengirim.</p><p><b>Hanya pada surat formal:</b> kop surat (bila dari lembaga), nomor surat, lampiran, hal, alamat tujuan.</p>'],
+['M6 Kaidah kebahasaan surat','<p>Lima aspek: ragam bahasa, kata sapaan, pilihan kata dan kalimat, kesantunan, ejaan (EBI Edisi V).</p>'+tb(['Aspek','Formal','Nonformal'],[['Ragam','Baku, lugas. “Saya memohon izin tidak mengikuti pelajaran.”','Santai, akrab. “Aku nggak bisa masuk sekolah, ya.”'],['Sapaan','Yth., Bapak/Ibu, Saudara; saya/kami','Nama panggilan, kamu, kakak; aku'],['Pilihan kata','sehubungan dengan, mohon, berkenan, demikian','ya, yuk, nih dipakai wajar'],['Kesantunan','Sangat hormat: mohon, terima kasih','Tetap sopan, tidak mengejek'],['Ejaan','Kapital, kata depan, tanda baca benar','Aturan sama']])+tb(['Akrab','Baku','Akrab','Baku'],[['nggak','tidak','banget','sekali'],['gimana','bagaimana','cuma','hanya'],['udah','sudah','bilang','mengatakan'],['bikin','membuat','kasih tahu','memberi tahu']])+tb(['Keliru','Benar'],[['dirumah','di rumah'],['silahkan','silakan'],['terimakasih; ijin','terima kasih; izin'],['hari sabtu, 14 november 2026','hari Sabtu, 14 November 2026'],['pukul 08.00 wib','pukul 08.00 WIB'],['Dengan hormat.','Dengan hormat,'],['yth. bapak kepala sekolah','Yth. Bapak Kepala Sekolah']])],
+['M7 Tiga Petunjuk Detektif','<ol><li><b>Kepada siapa dan untuk apa?</b> Lembaga atau orang yang dihormati dengan urusan resmi (formal), atau teman dan keluarga dengan urusan pribadi (nonformal).</li><li><b>Bagaimana strukturnya?</b> Ada kop, nomor, lampiran, hal, alamat tujuan (formal), atau bebas diawali tanggal dan sapaan akrab (nonformal).</li><li><b>Bagaimana bahasanya?</b> Baku, lugas, sangat hormat (formal), atau santai dan akrab tetapi santun (nonformal).</li></ol>'],
+['M8 Anggapan keliru yang perlu diluruskan','<ul><li>“Surat nonformal boleh asal-asalan.” Yang benar: lebih akrab, tetapi tetap jelas dan santun.</li><li>“Surat yang sopan pasti formal.” Yang benar: jenis ditentukan penerima, tujuan, dan struktur.</li><li>“Surat formal harus panjang dan berkata sulit.” Yang benar: jelas, lengkap, ringkas, baku.</li><li>“Semua surat formal pakai kop.” Yang benar: kop untuk lembaga; surat perseorangan biasanya tanpa kop.</li><li>“Bagian surat cukup dihafal urutannya.” Yang benar: pahami fungsinya.</li></ul><p class="mut">Jeda Detektif: jelaskan ulang satu pelurusan dengan bahasamu sendiri memakai “karena ...”.</p>'],
+['Contoh surat formal utuh','<div class="card"><b>OSIS SMP NEGERI 1 CONTOH</b><br>Jalan Pendidikan No. 10, Contoh<br>Nomor: 012/OSIS/XI/2026<br>Lampiran: 1 berkas<br>Hal: Permohonan izin penggunaan aula<br>Contoh, 9 November 2026<br><br>Yth. Kepala SMP Negeri 1 Contoh<br>di Tempat<br><br>Dengan hormat,<br>Sehubungan dengan rencana kegiatan bakti sosial OSIS, kami memohon izin menggunakan aula sekolah pada Sabtu, 21 November 2026, pukul 08.00 sampai 12.00 WIB. Kegiatan tersebut diikuti oleh seluruh pengurus OSIS dan perwakilan tiap kelas. Demikian surat permohonan ini kami sampaikan. Atas perhatian dan izin Bapak, kami mengucapkan terima kasih.<br><br>Hormat kami,<br>Ketua OSIS<br>Raka Pratama</div><h3>Isi surat formal: tiga bagian</h3>'+tb(['Bagian','Fungsi','Contoh'],[['Pembuka','Latar belakang atau alasan surat','Sehubungan dengan rencana kegiatan bakti sosial OSIS, ...'],['Rincian','Apa, kapan, di mana, untuk apa','... memohon izin menggunakan aula pada Sabtu, 21 November 2026 ...'],['Penutup','Harapan dan terima kasih','Atas perhatian dan izin Bapak, kami mengucapkan terima kasih.']])],
+['Contoh surat nonformal utuh','<div class="card">Bandung, 9 November 2026<br><br>Halo, Dinda!<br>Apa kabar? Semoga kamu sehat dan selalu semangat, ya.<br>Aku mau cerita, kelasku kemarin juara satu lomba kebersihan. Senang sekali rasanya! Minggu depan main ke rumahku, yuk, nanti kuceritakan seru-serunya.<br>Kabari aku ya kalau kamu bisa datang.<br><br>Salam sayang,<br>Rani</div>'],
+['Ungkapan khas surat formal','<ul><li><b>Yth.</b> (Yang terhormat) pada alamat tujuan.</li><li><b>Dengan hormat,</b> salam pembuka; <b>Hormat kami,</b> atau <b>Hormat saya,</b> salam penutup.</li><li><b>Sehubungan dengan ...</b> membuka latar belakang.</li><li><b>mohon</b>, <b>memohon</b>, <b>berkenan</b> menyatakan permintaan dengan hormat.</li><li><b>Demikian surat ini kami sampaikan. Atas perhatian Bapak/Ibu, kami mengucapkan terima kasih.</b> sebagai penutup isi.</li></ul>'],
+['Mengenali jenis surat dari situasinya',tb(['Situasi','Jenis','Petunjuk penentu'],[['Murid memberi tahu wali kelas bahwa ia sakit dan tidak masuk sekolah','Formal','Penerima wali kelas; izin resmi'],['Murid menceritakan lomba kepada sahabat yang pindah kota','Nonformal','Penerima sahabat; memberi kabar'],['OSIS meminta izin memakai aula kepada kepala sekolah','Formal','Penerima kepala sekolah; permohonan resmi'],['Murid mengundang teman ke ulang tahunnya','Nonformal','Penerima teman; undangan pribadi'],['Sekolah mengundang wali murid menghadiri rapat','Formal','Penerima wali murid; undangan resmi']])]
+];
+const KILAT=[['Surat izin tidak masuk sekolah untuk wali kelas paling tepat dibuka dengan ...',['Hai, Bu Guru!','Yth. Ibu Wali Kelas, Dengan hormat,','Bu, dengerin ya.','Halo, wali kelasku!'],1,'Surat resmi memakai Yth. dan “Dengan hormat,”.'],
+['Kalimat yang paling cocok untuk surat kepada sahabat yang pindah kota ...',['Aku kangen, nih. Kapan kamu main ke sini?','Bersama surat ini kami memohon kehadiran Saudara.','Atas perhatian Bapak, kami mengucapkan terima kasih.','Demikian surat ini kami sampaikan.'],0,'Sahabat berarti bahasa akrab.'],
+['Bagian surat yang memberi tahu siapa penulisnya ...',['Salam pembuka','Tempat dan tanggal','Nama pengirim','Alamat tujuan'],2,'Nama pengirim menunjukkan identitas penulis.']];
+const L1=[['Surat A: “Yth. Bapak Kepala SMP ... Dengan hormat, ... memohon izin tidak mengikuti pelajaran ... Hormat saya, Siti.” Surat ini formal atau nonformal?',FN,0,'Penerima kepala sekolah, tujuan izin resmi, bahasa baku.'],
+['Pasangan penerima dan tujuan yang tepat untuk surat nonformal adalah ...',['Kepala sekolah, permohonan izin','Wali murid, undangan rapat resmi','Sahabat, bercerita tentang liburan','Ketua RW, pemberitahuan'],2,'Nonformal: teman atau keluarga dengan urusan pribadi.'],
+['Tujuan menulis surat yang termasuk “menyampaikan perasaan” adalah ...',['Mengucapkan terima kasih kepada teman','Memohon izin memakai aula','Memberi tahu jadwal rapat','Mengajukan permohonan'],0,'Terima kasih, selamat, dan rindu adalah perasaan.'],
+['Surat dari OSIS kepada kepala sekolah untuk meminjam aula termasuk surat ...',FN,0,'Penerima kepala sekolah, tujuan permohonan resmi.']];
+const L2=[['Bagian yang menunjukkan identitas lembaga pengirim adalah ...',['Kop surat','Hal','Lampiran','Salam pembuka'],0,'Kop memuat nama dan alamat lembaga.'],
+['Jika surat formal tidak memuat tempat dan tanggal, akibatnya ...',['Penerima tidak tahu siapa pengirim','Waktu surat dibuat dan batas waktu menjadi kabur','Isi tidak terbaca','Surat menjadi nonformal'],1,'Fungsi tanggal adalah penanda waktu.'],
+['Unsur yang HANYA ada pada surat formal adalah ...',['Salam penutup','Nama pengirim','Nomor surat dan hal','Tempat dan tanggal'],2,'Kop, nomor, lampiran, hal, dan alamat tujuan hanya milik surat formal.'],
+['“Apa kabar? Semoga kamu sehat, ya.” pada surat nonformal adalah ...',['Salam penutup','Pembuka isi','Penutup isi','Nama pengirim'],1,'Mengawali isi dengan menanyakan kabar.']];
+const L3=[['“Saya memohon izin tidak mengikuti pelajaran.” memakai ragam ...',['Baku','Akrab','Kasar','Daerah'],0,'Kata memohon, tidak, mengikuti bersifat baku.'],
+['Padanan baku dari “gimana” dan “banget” adalah ...',['bagaimana, sekali','bagai mana, banyak','gemana, amat','bagaimana, nian'],0,''],
+['Penulisan yang benar adalah ...',['Rapat dirumah Ketua RW hari sabtu.','Rapat di rumah Ketua RW pada hari Sabtu.','Rapat di rumah Ketua RW hari sabtu.','Rapat dirumah Ketua RW pada hari Sabtu.'],1,'“di” tempat dipisah; nama hari berhuruf kapital.'],
+['Penulisan yang benar adalah ...',['Kami mohon ijin dan terimakasih.','Kami mohon izin dan terima kasih.','Kami mohon izin dan terimakasih.','Kami mohon ijin dan terima kasih.'],1,'Bentuk baku: izin, terima kasih.']];
+const L4=[['Surat sopan kepada sahabat untuk berterima kasih, tanpa kop dan nomor, termasuk ...',['Formal karena sopan','Nonformal karena penerima sahabat dan tidak ada kop atau nomor','Formal karena ada ucapan terima kasih','Tidak dapat ditentukan'],1,'Kesopanan bukan penentu jenis surat.'],
+['Pernyataan yang benar tentang surat formal ...',['Semua memakai kop','Harus panjang dan berkata sulit','Kop dipakai lembaga; surat perseorangan biasanya tanpa kop','Tidak perlu bahasa baku'],2,''],
+['Petunjuk pertama dari Tiga Petunjuk Detektif adalah ...',['Panjang surat','Kepada siapa dan untuk apa surat ditulis','Warna kertas','Jumlah paragraf'],1,'']];
+const KALIMAT=[['Yth. Bapak Kepala Sekolah',0,'Kata sapaan hormat'],['Gimana kabarmu? Aku kangen banget nih.',1,'Ragam akrab: gimana, banget, nih'],['Atas perhatian Bapak/Ibu, kami mengucapkan terima kasih.',0,'Kesantunan formal'],['Datang ya, aku tunggu!',1,'Kalimat pendek dan akrab'],['Sehubungan dengan rencana kegiatan bakti sosial, kami memohon izin menggunakan aula.',0,'Pilihan kata resmi: sehubungan dengan, memohon; kalimat lengkap'],['Halo, Dinda!',1,'Kata sapaan akrab'],['Saya tidak dapat mengikuti pelajaran karena sakit.',0,'Ragam baku: tidak dapat, mengikuti'],['Aku nggak bisa masuk, ya, soalnya lagi sakit.',1,'Ragam akrab: nggak, soalnya, lagi'],['Demikian surat ini kami sampaikan.',0,'Ungkapan penutup khas surat formal'],['Cepat sembuh ya, jangan lupa istirahat.',1,'Ungkapan perhatian akrab; kalimat bebas']].map(k=>['Kalimat ini cocok untuk surat ...<br><i>“'+k[0]+'”</i>',FN,k[1],'Petunjuk: '+k[2]+'.']);
+const MISI=[['Yth. Ibu Wali Kelas VII B di Tempat. Dengan hormat, saya memberitahukan bahwa putri saya, Nadia, belum dapat masuk sekolah karena demam. Terima kasih atas perhatian Ibu.',0,'Penerima wali kelas, tujuan memberi tahu dan izin; Yth., “Dengan hormat,”; bahasa baku.'],
+['Hai, Rani! Kemarin aku nonton pertandingan basket sekolah, seru banget! Minggu depan kita nonton bareng lagi, yuk. Balas ya!',1,'Penerima teman; sapaan akrab; bahasa santai.'],
+['Nomor: 045/SMP1/XI/2026. Lampiran: -. Hal: Undangan rapat wali murid.',0,'Nomor, lampiran, dan hal hanya dimiliki surat formal.'],
+['Kepada sahabatku Raka, semoga kamu selalu sehat. Terima kasih atas hadiah yang kamu berikan. Aku sangat senang menerimanya.',1,'Mengecoh: sopan, tetapi penerima sahabat, tujuan pribadi, tanpa kop, nomor, hal.'],
+['Yth. Bapak Wali Kelas. Saya Dimas dari kelas VII A memohon izin mengikuti lomba pidato pada hari Rabu. Terima kasih.',0,'Mengecoh: tanpa kop karena perseorangan, tetapi penerima wali kelas, izin resmi, bahasa baku.'],
+['Nenek tersayang, di sini Dimas baik-baik saja. Nenek jangan lupa minum obat, ya. Salam sayang dari Dimas.',1,'Penerima nenek; kabar dan perhatian; salam penutup akrab.'],
+['Yth. Bapak/Ibu Orang Tua Murid. Sehubungan dengan kegiatan karyawisata, kami memberitahukan bahwa keberangkatan dijadwalkan pukul 06.30 WIB. Demikian pemberitahuan ini kami sampaikan.',0,'Penerima orang tua murid; pemberitahuan resmi; ungkapan khas formal.'],
+['Selamat ulang tahun, Dinda! Semoga makin pintar dan sehat selalu. Nanti pulang sekolah kita makan bakso bareng ya!',1,'Penerima teman; ucapan selamat; bahasa akrab.'],
+['Tantangan 1: Yth. Kakek dan Nenek di Yogyakarta. Semoga Kakek dan Nenek senantiasa sehat dan dalam lindungan Tuhan. Kami sekeluarga di sini baik-baik saja. Salam hormat dari cucumu, Dimas.',1,'Bahasanya sangat hormat, tetapi penerima keluarga, tujuan memberi kabar, tanpa nomor, lampiran, hal.'],
+['Tantangan 2: Selamat siang, Bu. Saya Dimas dari kelas VII A. Saya mohon izin tidak mengikuti pelajaran hari ini karena ada kegiatan keluarga. Terima kasih, Bu. (dikirim lewat surel kepada guru)',0,'Tanpa kop atau nomor, tetapi penerima guru, izin resmi, bahasa baku dan hormat.']].map(m=>['Tentukan jenis surat: <i>“'+m[0]+'”</i>',FN,m[1],m[2]]);
+const SF=['Kop surat','Nomor surat','Lampiran','Hal (perihal)','Tempat dan tanggal','Alamat tujuan','Salam pembuka','Salam penutup','Tanda tangan dan nama terang'];
+const SN=['Tempat dan tanggal','Salam pembuka','Pembuka isi','Isi surat','Penutup isi','Salam penutup','Nama pengirim'];
+const CO=['Ragam bahasa baku','Ragam bahasa akrab','Kata sapaan hormat','Ungkapan santun'];
+
+/* ===== TAMPILAN ===== */
+const TABS=[['peta','Peta'],['materi','Materi'],['bedah','Bedah Surat'],['latihan','Latihan'],['pilah','Pilah Kalimat'],['misi','Misi Akhir'],['asesmen','Asesmen'],['lencana','Lencana']];
+function show(id){document.querySelectorAll('section').forEach(s=>s.classList.toggle('a',s.id==id));document.querySelectorAll('nav button,.bn button').forEach(b=>b.classList.toggle('a',b.dataset.t==id));scrollTo(0,0)}
+$('#nav').innerHTML=TABS.map(t=>'<button data-t="'+t[0]+'">'+t[1]+'</button>').join('');
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.t));
+
+const lv=(t,d,go,b)=>'<div class="card lv"><b>'+t+'</b><br><span class="mut">'+d+'</span><br>'+(go?'<button class="btn" style="margin-top:6px" onclick="show(\''+go+'\')">Buka</button> ':'')+(b?'<span class="mut">Lencana: '+b+'</span>':'')+'</div>';
+$('#peta').innerHTML='<h2>Halo, Petugas Pos Baru!</h2><p>Kantor Pos Kelas kebanjiran surat. Misimu: memahami struktur dan kaidah kebahasaan surat, lalu membedakan surat formal dan nonformal. Selesaikan level secara berurutan dan jawab dengan alasan “karena ...”.</p>'+
+lv('Level 0: Loket Selamat Datang','Kuis Kilat di bawah menentukan jalurmu.')+'<div class="card"><b>Tujuan Pembelajaran</b><ol><li>Menjelaskan pengertian, tujuan, dan jenis surat dengan bahasa sendiri.</li><li>Mengidentifikasi struktur surat formal dan nonformal beserta fungsinya.</li><li>Menjelaskan kaidah kebahasaan surat.</li><li>Membedakan surat formal dan nonformal, lalu menyampaikan alasannya dengan santun.</li></ol><b>Aturan Main</b><ol><li>Kerjakan sendiri, boleh melihat karya teman untuk menanggapi.</li><li>Tulis dengan namamu.</li><li>Gunakan bahasa yang santun.</li><li>Selesaikan level secara berurutan.</li><li>Setiap jawaban memakai kata “karena ...”.</li></ol></div><div class="card"><b>Kartu Identitas Petugas</b><input id="nm" placeholder="Nama panggilan petugas pos, mis. Petugas Aji"><input id="kl" placeholder="Surat atau pesan yang pernah kuterima atau kutulis adalah ..."><button class="btn" onclick="saveId()">Simpan kartu</button><div id="idc"></div></div><div class="card"><b>Kuis Kilat</b><div id="kilat"></div><div id="jalur"></div></div>'+
+lv('Level 1: Surat Misterius','Dua amplop tertukar! Baca Surat A dan B, lalu tulis dugaanmu di Padlet: Menurutku Surat ... untuk ... karena ...','','Detektif Muda')+'<div class="card"><b>Cocokkan surat dengan amplopnya</b><div id="mis"></div></div>'+
+lv('Level 2: Bedah Surat','Materi M1–M5, lalu Latihan 2.','materi','Ahli Bedah Surat')+
+lv('Level 3: Detektif Bahasa','Materi M6, Latihan 3, dan game Pilah Kalimat.','pilah','Detektif Bahasa')+
+lv('Level 4: Misi Akhir Petugas Pos Surat','Materi M7–M8, lalu tentukan jenis 8 Kartu Surat dan 2 Kartu Tantangan.','misi','Petugas Pos Teladan')+
+lv('Uji pemahaman penuh','Lembar Asesmen “Cocokkan dan Kenali” (28 butir).','asesmen')+
+'<div class="card"><b>Padlet Kantor Pos Kelas</b><br><a href="https://padlet.com/baguswindu12/surat-formal-dan-nonformal-kelas-vii-s025a0199kj1ukk6yn1o" target="_blank" rel="noopener">Buka papan Padlet</a> untuk menempel bukti dan saling menanggapi.<br><button class="btn" style="margin-top:8px;background:#6b7a88" onclick="if(confirm(\'Hapus semua kemajuan?\')){P={};save();location.reload()}">Reset kemajuan</button></div>';
+quiz($('#kilat'),KILAT,true,s=>{P.jalur=s>=2?'Mahir':'Bimbingan';save();stamps();$('#jalur').innerHTML='<div class="res">Jalurmu: <b>Jalur '+P.jalur+'</b>.'+(P.jalur=='Bimbingan'?'<br>Kartu petunjuk: (1) Kepada siapa dan untuk apa surat ditulis? (2) Adakah kop, nomor, lampiran, hal, alamat tujuan, atau bebas? (3) Bahasanya baku atau akrab? Ingat: bahasa sopan belum tentu formal.':'<br>Kamu siap menghadapi Kartu Tantangan di Misi Akhir.')+'</div>'});
+
+$('#materi').innerHTML='<h2>Materi Surat</h2><details open><summary>🔍 Bedah Surat: lihat contoh bernomor</summary><p class="mut">Pelajari nomor dan fungsinya, lalu uji dirimu di tab Latihan.</p><h3>Surat formal</h3><img class="fig" src="surat-formal.jpg" alt="Contoh surat formal dengan sembilan bagian bernomor"><p class="mut">Catatan: panah nomor 6 menunjuk alamat tujuan (Yth. ...). Salam pembuka surat ini adalah “Dengan hormat,”.</p><h3>Surat nonformal</h3><img class="fig" src="surat-nonformal.jpg" alt="Contoh surat nonformal dengan tujuh bagian bernomor"></details>'+'<p class="mut">Buka satu per satu. Pahami fungsi tiap bagian, jangan menghafal urutan.</p>'+MATERI.map(m=>'<details><summary>'+m[0]+'</summary>'+m[1]+'</details>').join('');
+
+$('#latihan').innerHTML='<h2>Petualangan Surat: Latihan</h2><details open><summary>Latihan 1: Pengertian, tujuan, dan jenis surat</summary><div id="l1"></div></details><details><summary>Latihan 2: Struktur surat</summary><div id="l2"></div></details><details><summary>Latihan 3: Kaidah kebahasaan</summary><div id="l3"></div></details><details><summary>Latihan 4: Membedakan jenis surat</summary><div id="l4"></div></details>';
+[['l1',L1],['l2',L2],['l3',L3],['l4',L4]].forEach(a=>quiz($('#'+a[0]),a[1],true,(s,n)=>award(a[0],s,n)));
+
+$('#pilah').innerHTML='<h2>Game 1: Ayo Jadi Jagoan Surat</h2><p>Susun bagian surat di kertas kosong, lalu beri nama tiap bagiannya. Pilih surat formal atau nonformal. Selesaikan sampai tamat untuk merebut lencana Detektif Bahasa.</p><div class="card gcard"><div class="big">✉️🐥📬</div><b>Seret, taruh, periksa!</b><br><span class="mut">Dua halaman permainan: susun surat, lalu beri nama bagiannya.</span><br><button class="btn" onclick="openGame(\'ayo-bermain.html\',\'Ayo Jadi Jagoan Surat\')">🎮 Mainkan Game 1</button></div>';
+$('#misi').innerHTML='<h2>Game 2: Detektif Surat Heboh</h2><p>Tentukan jenis tiap surat dan temukan kunci petunjuknya. Ada 8 Kartu Surat dan 2 Kartu Tantangan. Raih minimal 8 kunci tepat untuk lencana Petugas Pos Teladan. Setelah ini, sampaikan alasan Kartu Pilihanmu di Padlet (rekam suara, tulisan, atau peta konsep).</p><div class="card gcard"><div class="big">🕵️💌🚀</div><b>Nyawa 3, waktu terbatas, combo menanti!</b><br><span class="mut">Jawab cepat untuk bonus, jawab benar berturut-turut untuk combo.</span><br><button class="btn" onclick="openGame(\'detektif-surat.html\',\'Detektif Surat Heboh\')">🎮 Mainkan Game 2</button></div>';
+$('#asesmen').innerHTML='<h2>Asesmen “Cocokkan dan Kenali”</h2><div class="card"><b>📝 Asesmen ada di halaman sendiri</b><p>28 butir (A = 6, B = 7, C = 5, D = 10). Jawaban dan nilaimu langsung dikirim ke guru, jadi <b>internet harus menyala</b> saat mengerjakan. Materi dan permainan lain tetap bisa dipakai tanpa internet.</p><button class="btn" onclick="location.href=\'asesmen.html\'">Buka halaman Asesmen</button></div>';
+
+const SF10=SF.slice(0,7).concat(['Isi surat'],SF.slice(7));
+const mk=(pre,L,rows)=>rows.map((x,i)=>[pre+' ['+(i+1)+']: <i>“'+x[0]+'”</i> adalah ...',L,i,'Fungsi: '+x[1]]);
+const b1=mk('Surat Bedah 1 (formal), bagian',SF10,[['SMP NEGERI 1 CONTOH, Jalan Pendidikan No. 10, Contoh','menunjukkan lembaga pengirim.'],['Nomor: 045/SMP1/XI/2026','penanda urutan arsip.'],['Lampiran: -','jumlah berkas; tanda “-” bila tidak ada.'],['Hal: Undangan rapat wali murid','pokok isi dalam satu frasa.'],['Contoh, 9 November 2026','tempat dan waktu surat dibuat.'],['Yth. Bapak/Ibu Wali Murid Kelas VII di Tempat','kepada siapa surat ditujukan.'],['Dengan hormat,','sapaan hormat sebelum isi.'],['Sehubungan dengan rencana kegiatan karyawisata, kami mengundang Bapak/Ibu ... kami mengucapkan terima kasih.','maksud surat: pembuka, rincian, penutup.'],['Hormat kami, Kepala SMP Negeri 1 Contoh','penutup yang hormat.'],['(tanda tangan) Hendra Wibowo, S.Pd.','pengesahan dan identitas pengirim.']]);
+const b2=mk('Surat Bedah 2 (nonformal), bagian',SN,[['Semarang, 9 November 2026','tempat dan waktu surat ditulis.'],['Halo, Kak Laras!','sapaan akrab.'],['Apa kabar, Kak? Semoga Kakak sehat dan lancar kuliahnya, ya.','mengawali isi dengan ramah.'],['Aku mau bilang terima kasih untuk buku cerita yang Kakak kirim. ...','inti pesan.'],['Kabari aku ya, Kak, kalau sudah beli tiket pulang.','harapan atau permintaan membalas.'],['Salam sayang,','penutup yang akrab.'],['Tari','identitas pengirim.']]);
+const br=[['Surat Rusak: Surat Bedah 1 tanpa “Contoh, 9 November 2026”. Bagian apa yang hilang dan akibatnya?',['Kop surat: penerima tidak tahu pengirimnya','Tempat dan tanggal: waktu surat dibuat dan batas waktu menjadi kabur','Salam penutup: surat berhenti mendadak','Nomor surat: surat tidak punya penomoran'],1,'Tempat dan tanggal menunjukkan kapan surat dibuat.'],
+['Surat Rusak (Jalur Mahir): surat tanpa “Hal” dan “Yth. ... di Tempat”. Akibatnya ...',['Penerima tidak tahu pokok isi dan tidak jelas siapa yang harus menanggapi','Surat menjadi nonformal','Hanya tanggal yang kabur','Tidak ada akibat'],0,'Hal menyatakan pokok isi; alamat tujuan menunjukkan penerima.'],
+['Kembar tapi beda: lima unsur yang HANYA ada pada surat formal ...',['Kop, nomor, lampiran, hal, alamat tujuan','Tanggal, salam pembuka, isi, salam penutup, nama','Salam pembuka, isi, tanda tangan, tanggal, nomor','Kop, tanggal, isi, nama, hal'],0,'Surat nonformal tidak memerlukan kop, nomor, lampiran, hal, dan alamat tujuan.']];
+const MIS=[['Amplop pertama bertuliskan “Untuk Kepala Sekolah”. Surat mana isinya?<br><i>Surat A: “Yth. Bapak Kepala SMP Negeri 1 Contoh di Tempat. Dengan hormat, saya Siti Aulia, murid kelas VII B, memohon izin tidak mengikuti pelajaran pada hari Senin karena sakit. Hormat saya, Siti Aulia.”</i><br><i>Surat B: “Bandung, 9 November 2026. Halo, Bima! Apa kabar? Aku kangen banget nih. ... Salam sayang, Dimas.”</i>',['Surat A','Surat B'],0,'Kepala sekolah: izin resmi, Yth., “Dengan hormat,”, bahasa baku.'],['Amplop kedua bertuliskan “Untuk Bima”. Isinya ...',['Surat A','Surat B'],1,'Bima teman: “Halo, Bima!”, “Salam sayang,”, bahasa akrab.']];
+$('#bedah').innerHTML='<h2>Bedah Surat</h2><p>Pelajari contoh bernomor di tab Materi, lalu tentukan nama dan fungsi tiap bagian. Skor minimal 75% untuk lencana Ahli Bedah Surat.</p><details open><summary>Surat Bedah 1 (formal, 10 bagian)</summary><div id="b1"></div></details><details><summary>Surat Bedah 2 (nonformal, 7 bagian)</summary><div id="b2"></div></details><details><summary>Surat Rusak dan Kembar tapi beda</summary><div id="br"></div></details>';
+[['b1',b1],['b2',b2],['br',br]].forEach(a=>quiz($('#'+a[0]),a[1],true,(x,n)=>award('l2',x,n)));
+quiz($('#mis'),MIS,true,(x,n)=>award('l1',x,n));
+function showId(){$('#idc').innerHTML=P.nm?'<div class="res">Petugas <b>'+P.nm.replace(/</g,'&lt;')+'</b>: “Surat atau pesan yang pernah kuterima atau kutulis adalah '+(P.kl||'...').replace(/</g,'&lt;')+'”</div>':''}
+function saveId(){P.nm=$('#nm').value.trim();P.kl=$('#kl').value.trim();save();showId()}
+$('#nm').value=P.nm||'';$('#kl').value=P.kl||'';showId();
+
+/* ===== GAME (iframe layar penuh) ===== */
+let gfx=null;
+function openGame(u,t){$('#gt').textContent=t;$('#gf').src=u;$('#gm').classList.add('on');$('#gx').focus()}
+function closeGame(){$('#gm').classList.remove('on');$('#gf').src='about:blank';if(gfx){const k=gfx;gfx=null;confetti();stampPop(k)}}
+$('#gx').onclick=closeGame;
+addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#gm').classList.contains('on'))closeGame()});
+addEventListener('message',e=>{const m=e.data;if(e.origin!==location.origin||!m||m.literasa!=='game'||!['l3','l4'].includes(m.k)||!(m.n>0))return;
+  const old=P[m.k]||0,v=Math.max(old,Math.round(100*m.s/m.n));P[m.k]=v;save();stamps();if(v>=75&&old<75)gfx=m.k});
+const BD=[['l1','Detektif Muda','Level 1: Surat Misterius'],['l2','Ahli Bedah Surat','Level 2: Bedah Surat'],['l3','Detektif Bahasa','Level 3: Kaidah kebahasaan'],['l4','Petugas Pos Teladan','Level 4: Misi Akhir']];
+function renderL(){var el=$('#lencana');if(!el)return;var on=document.activeElement&&document.activeElement.tagName=='TEXTAREA';if(on)return;
+const MI=['🕵️','🔬','🔎','🏆'];
+el.innerHTML='<h2>Ruang Lencana dan Refleksi</h2><div class="g4">'+BD.map((b,i)=>{const o=(P[b[0]]||0)>=75;return '<div class="bd'+(o?' on':'')+'"><div class="md">'+(o?MI[i]:'🔒')+'</div><b>'+b[1]+'</b><small>'+(o?'Diraih ('+P[b[0]]+'%)':b[2]+' (skor 75% untuk meraih)')+'</small></div>'}).join('')+'</div><div class="card"><b>Refleksi</b><p>Satu hal yang berubah dari pemahamanku tentang surat adalah ...</p><textarea id="rf" rows="3"></textarea><p>Bagian yang masih membingungkan bagiku ...</p><textarea id="rg" rows="2"></textarea><button class="btn" onclick="P.rf=$(\'#rf\').value;P.rg=$(\'#rg\').value;save();this.textContent=\'Tersimpan ✓\'">Simpan refleksi</button><p class="mut">Tempel bukti latihan dan refleksimu di kartu Padlet Kantor Pos Kelas.</p></div>';
+$('#rf').value=P.rf||'';$('#rg').value=P.rg||'';Lit.reveal(el)}
+
+function confetti(){Lit.confetti(34)}
+function renderH(){const ok=k=>(P[k]||0)>=75;
+const L=[['peta','🏤','Level 0: Loket Selamat Datang','Kenalan dan tentukan jalurmu',!!P.jalur],['lv1','🕵️','Level 1: Surat Misterius','Pengertian, tujuan, dan jenis surat',ok('l1')],['lv2','🔬','Level 2: Bedah Surat','Struktur surat formal dan nonformal',ok('l2')],['lv3','🔎','Level 3: Detektif Bahasa','Kaidah kebahasaan + Game 1',ok('l3')],['lv4','🏆','Level 4: Misi Akhir','Tiga petunjuk + Game 2',ok('l4')]];
+const cur=L.findIndex(x=>!x[4]),n=BADGES.filter(b=>ok(b[0])).length;
+$('#home').innerHTML='<div class="hero-card"><div class="rw"><div class="ring" id="ring0" style="--p:0"></div><b id="hn">0/4</b></div><div><h2>Halo, Petugas Pos'+(P.nm?' '+P.nm.replace(/</g,'&lt;'):'')+'!</h2><p>Antar tiap surat ke tujuan yang tepat dan kumpulkan 4 lencana prangko.</p></div><div class="bub"><span class="av">🕊️</span><div><b>Pipi si merpati pos</b>'+TIP[(n+(P.jalur?1:0))%TIP.length]+'</div></div></div><div class="path">'+L.map((x,i)=>'<button class="nd'+(x[4]?' done':i==cur?' cur':'')+'" onclick="go(\''+x[0]+'\')"><span class="ic">'+(x[4]?'✅':x[1])+'</span><span class="tx"><b>'+x[2]+'</b><small>'+x[3]+'</small></span></button>').join('')+'</div><div class="card"><b>🎯 Uji pemahaman penuh</b><br><span class="mut">Selesaikan level dulu, lalu kerjakan Asesmen 28 butir.</span><br><button class="btn" style="margin-top:8px" onclick="location.href=\'asesmen.html\'">Buka Asesmen</button></div>';
+requestAnimationFrame(()=>requestAnimationFrame(()=>{const r=$('#ring0');if(r)r.style.setProperty('--p',n*25)}));
+Lit.count($('#hn'),n,1100,v=>v+'/4');Lit.reveal($('#home'))}
+const main=document.querySelector('main'),d=[...document.querySelectorAll('#materi>details')];
+const mat=(...i)=>i.map(k=>d[k+1]),pr=id=>$('#'+id).closest('details');
+function lvl(id,ic,t,m,col,steps,nx){const e=document.createElement('section');e.id=id;
+e.innerHTML='<button class="btn sm" onclick="show(\'home\')">← Peta</button><div class="lb" style="background:'+col+'"><div class="bg">'+ic+'</div><h2>'+t+'</h2><p style="margin:4px 0 0">'+m+'</p></div><div class="stp">'+steps.map((x,i)=>'<button onclick="sp(\''+id+'\','+i+')">'+x+'</button>').join('')+'</div>'+steps.map((x,i)=>'<div class="pn" id="'+id+i+'"></div>').join('')+'<div class="nx" id="'+id+'n"></div>';
+e._s=steps.length;e._n=nx;main.insertBefore(e,$('#asesmen'));sp(id,0)}
+function sp(id,i){const e=$('#'+id),k=e._s;e.querySelectorAll('.pn').forEach((p,j)=>p.classList.toggle('a',j==i));e.querySelectorAll('.stp button').forEach((b,j)=>{b.classList.toggle('a',j==i);b.classList.toggle('dn',j<i)});
+$('#'+id+'n').innerHTML=i<k-1?'<button class="btn" onclick="sp(\''+id+'\','+(i+1)+')">Lanjut ke langkah '+(i+2)+' →</button>':'<button class="btn" onclick="go(\''+e._n[0]+'\')">'+e._n[1]+'</button>';scrollTo(0,0)}
+const put=(id,ns)=>ns.forEach(n=>{if(n.tagName=='DETAILS')n.open=true;$('#'+id).append(n)});
+lvl('lv1','🕵️','Level 1: Surat Misterius','Dua amplop tertukar! Pahami dulu apa itu surat dan jenisnya.','linear-gradient(135deg,#6a4cff,#9a6bff)',['📖 Baca dulu','✏️ Coba!'],['lv2','Lanjut ke Level 2 →']);
+put('lv10',mat(0,1,11));put('lv11',[$('#mis').parentNode,pr('l1')]);
+lvl('lv2','🔬','Level 2: Bedah Surat','Bongkar susunan surat dan temukan fungsi tiap bagian.','linear-gradient(135deg,#ec4899,#f43f5e)',['📖 Baca dulu','✏️ Bedah!'],['lv3','Lanjut ke Level 3 →']);
+put('lv20',[d[0]].concat(mat(2,3,4,8,9)));put('lv21',[pr('b1'),pr('b2'),pr('br'),pr('l2')]);
+lvl('lv3','🔎','Level 3: Detektif Bahasa','Selidiki ragam bahasa, sapaan, dan ejaan surat.','linear-gradient(135deg,#0d9488,#2563eb)',['📖 Baca dulu','✏️ Latihan','🎮 Game 1'],['lv4','Lanjut ke Level 4 →']);
+put('lv30',mat(5,10));put('lv31',[pr('l3')]);put('lv32',[...$('#pilah').children]);
+lvl('lv4','🏆','Level 4: Misi Akhir','Kumpulkan semua petunjuk dan antar surat ke tujuan.','linear-gradient(135deg,#f97316,#e11d74)',['📖 Baca dulu','✏️ Latihan','🎮 Game 2'],['asesmen','Ke Asesmen →']);
+put('lv40',mat(6,7));put('lv41',[pr('l4')]);put('lv42',[...$('#misi').children]);
+['materi','latihan','bedah','pilah','misi'].forEach(i=>$('#'+i).remove());
+document.querySelectorAll('#peta .card.lv').forEach(x=>x.remove());
+$('#peta').insertAdjacentHTML('afterbegin','<button class="btn" style="padding:5px 14px;font-size:.85rem" onclick="show(\'home\')">← Peta</button>');
+$('#peta').insertAdjacentHTML('beforeend','<div style="margin:24px 0;text-align:center"><button class="btn" onclick="go(\'lv1\')">Mulai Level 1 →</button></div>');
+const bn=document.createElement('div');bn.className='bn';
+bn.innerHTML=[['home','🗺️','Peta'],['asesmen','📝','Asesmen'],['lencana','🏅','Lencana']].map(x=>'<button data-t="'+x[0]+'" onclick="show(\''+x[0]+'\')"><span>'+x[1]+'</span>'+x[2]+'</button>').join('');document.body.append(bn);
+
+const TIP=['Baca dulu materinya, lalu coba latihan. Jangan lupa jawab dengan “karena ...”.','Ingat Tiga Petunjuk Detektif: penerima dan tujuan, struktur, bahasa.','Surat yang sopan belum tentu formal. Lihat penerimanya!','Kop, nomor, lampiran, hal, dan alamat tujuan hanya milik surat formal.','Hebat! Tinggal sedikit lagi, lencana prangko menantimu.'];
+const LV={peta:['Level 0: Loket Selamat Datang','Kenalan dulu dengan kantor pos kelas, lalu tentukan jalurmu!'],lv1:['Level 1: Surat Misterius','Dua amplop tertukar! Bantu cocokkan surat dengan penerimanya.'],lv2:['Level 2: Bedah Surat','Bongkar susunan surat dan temukan fungsi tiap bagian.'],lv3:['Level 3: Detektif Bahasa','Selidiki ragam bahasa, sapaan, dan ejaan surat.'],lv4:['Level 4: Misi Akhir','Kumpulkan semua petunjuk dan antar surat ke tujuan!']};
+function env(t,x,b,cb){const o=$('#ov'),ev=$('#ev');ev.classList.remove('open');$('#oh').style.display='';$('#ot').textContent=t;$('#ox').textContent=x;$('#ob').textContent=b;o.className='on';
+ev.onclick=()=>{if(ev.classList.contains('open'))return;ev.classList.add('open');$('#oh').style.display='none';Lit.burst(ev,16,['💌','✨','⭐','🎉'])};$('#ob').onclick=()=>{o.className='';cb&&cb()}}
+function go(id){LV[id]?env(LV[id][0],LV[id][1],'Buka misi',()=>show(id)):show(id)}
+function stampPop(k){const b=BADGES.find(x=>x[0]==k),e=document.createElement('div');e.className='sg';e.innerHTML='<div><small>LENCANA BARU</small><span>🏅</span>'+b[1]+'<br><small style="background:var(--ok);margin:6px 0 0">✔ LULUS</small></div>';document.body.append(e);setTimeout(()=>e.remove(),2700)}
+let seen=0;try{seen=sessionStorage.getItem('spl')}catch(e){}
+if(!seen){try{sessionStorage.setItem('spl',1)}catch(e){}env('Halo, Petugas Pos!','Ada surat penting untukmu! Antar tiap surat ke tujuan yang tepat dan kumpulkan 4 lencana prangko.','Masuk Kantor Pos')}
+stamps();show('home');Lit.reveal();
+</script><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))</script>
+</body></html>
