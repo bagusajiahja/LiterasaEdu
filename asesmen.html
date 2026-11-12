@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#6a4cff">
+<title>Asesmen | Literasa</title>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="literasa.css">
+<style>
+.wrap{max-width:720px;margin:0 auto;padding:20px 16px 80px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.back{color:var(--v);font-weight:700;text-decoration:none}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;font:700 .82rem var(--f-h);background:var(--card);border:1px solid var(--line)}
+.pill i{width:10px;height:10px;border-radius:50%;background:var(--bad);display:block}
+.pill.on i{background:var(--ok)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:var(--sh);animation:inn .5s both}
+h1{margin:.1em 0 .3em;font-size:1.8rem;line-height:1.2}
+.sub{color:var(--ink2);margin:0 0 6px}
+.warn{background:#fff7e0;border:2px solid var(--sun);border-radius:18px;padding:14px 16px;margin:18px 0;color:#5c4300}
+.warn b{display:block;font:700 1.02rem var(--f-h);margin-bottom:6px}
+.warn ul{margin:6px 0 0;padding-left:20px}
+.alert{background:#ffe9ed;border:2px solid var(--bad);color:#7a1226;border-radius:14px;padding:10px 14px;margin:12px 0;font-weight:600}
+label{display:block;font-weight:700;margin:16px 0 6px}
+input[type=text],textarea{width:100%;font:inherit;padding:12px 14px;border:2px solid var(--line);border-radius:14px;background:#fff;color:var(--ink)}
+input:focus,textarea:focus{outline:none;border-color:var(--v)}
+.row{display:grid;grid-template-columns:1fr 130px;gap:12px}
+.err{color:var(--bad);font-weight:700;min-height:1.4em;margin:10px 0 0}
+.actions{display:flex;gap:10px;justify-content:space-between;margin-top:22px;flex-wrap:wrap}
+.btn.ghost{background:var(--tint);color:var(--v);box-shadow:none}
+.btn.ghost:disabled{background:var(--tint);color:#a9a5cf}
+.meta{display:flex;justify-content:space-between;align-items:center;font:700 .9rem var(--f-h);color:var(--mut);margin-bottom:8px}
+.track{height:10px;background:var(--tint);border-radius:99px;overflow:hidden;margin-bottom:20px}
+.track div{height:100%;width:0;background:var(--g1);border-radius:99px;transition:width .4s var(--spring)}
+.q{font:600 1.15rem/1.5 var(--f-b);margin:0 0 16px}
+.opt{display:flex;gap:12px;align-items:center;width:100%;text-align:left;font:inherit;font-weight:600;color:var(--ink);background:#fff;border:2px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:10px;cursor:pointer;transition:border-color .2s,background .2s}
+.opt:hover{border-color:var(--v2)}
+.opt i{flex:none;width:32px;height:32px;border-radius:10px;background:var(--tint);color:var(--v);display:grid;place-items:center;font:700 .95rem var(--f-h);font-style:normal}
+.opt.sel{border-color:var(--v);background:var(--tint)}
+.opt.sel i{background:var(--v);color:#fff}
+.skor{font:800 4rem/1 var(--f-h);margin:10px 0;background:var(--g1);-webkit-background-clip:text;background-clip:text;color:transparent}
+.center{text-align:center}
+[hidden]{display:none!important}
+@media(max-width:480px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="aurora"><i></i><i></i><i></i></div>
+<main class="wrap">
+  <div class="top">
+    <a class="back" href="index.html">← Beranda</a>
+    <span class="pill" id="net"><i></i><span>Memeriksa…</span></span>
+  </div>
+
+  <!-- 1. Gerbang: peringatan wajib internet -->
+  <section class="card" id="gate">
+    <h1>Asesmen Surat Formal dan Nonformal</h1>
+    <p class="sub">Kerjakan sendiri ya. Jawaban dan nilaimu langsung dikirim ke guru.</p>
+
+    <div class="warn" role="alert">
+      <b>⚠️ Asesmen ini wajib terhubung internet</b>
+      Jawaban dan nilaimu hanya tercatat kalau berhasil terkirim ke guru.
+      <ul>
+        <li>Pastikan kuota atau Wi-Fi menyala sebelum mulai.</li>
+        <li>Jangan tutup halaman sebelum muncul tulisan “Nilai terkirim”.</li>
+        <li>Kalau sinyal putus, jawabanmu tersimpan di perangkat. Sambungkan internet lalu kirim ulang.</li>
+      </ul>
+    </div>
+    <div class="alert" id="offmsg" hidden>Kamu sedang offline. Tombol mulai aktif lagi setelah internet tersambung.</div>
+
+    <label for="nama">Nama lengkap</label>
+    <div class="row">
+      <input type="text" id="nama" maxlength="80" autocomplete="name" placeholder="Contoh: Rani Putri">
+      <input type="text" id="kelas" maxlength="10" placeholder="Kelas, mis. 7A" aria-label="Kelas">
+    </div>
+    <p class="err" id="err" role="status"></p>
+    <div class="actions">
+      <button class="btn" id="mulai" type="button">Mulai asesmen</button>
+    </div>
+  </section>
+
+  <!-- 2. Soal -->
+  <section class="card" id="quiz" hidden>
+    <div class="alert" id="qwarn" hidden>Koneksi terputus. Kamu masih bisa menjawab, tapi internet harus menyala saat menekan Kirim.</div>
+    <div class="meta"><span id="no"></span><span id="who"></span></div>
+    <div class="track"><div id="bar"></div></div>
+    <p class="q" id="teks"></p>
+    <div id="opsi"></div>
+    <div class="actions">
+      <button class="btn ghost" id="prev" type="button">Sebelumnya</button>
+      <button class="btn" id="next" type="button">Berikutnya</button>
+      <button class="btn" id="kirim" type="button" hidden>Selesai dan kirim</button>
+    </div>
+  </section>
+
+  <!-- 3. Pengiriman dan hasil -->
+  <section class="card center" id="done" hidden>
+    <h1 id="djudul">Mengirim jawaban…</h1>
+    <div class="skor" id="dskor" hidden></div>
+    <p class="sub" id="dstat"></p>
+    <div class="actions" style="justify-content:center">
+      <button class="btn" id="retry" type="button" hidden>Kirim ulang</button>
+      <a class="btn" id="home" href="index.html" hidden>Kembali ke beranda</a>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ===== PENGATURAN: ganti dua baris ini ===== */
+const URL_SHEET='https://script.google.com/macros/s/AKfycbwbvzSiBjt3e737lw__3G7nN9aGJKggZ-OOGDJ2PV_Izs_ZrsFRIi8UOTPa1bT-XPfjow/exec';
+const SECRET='BAGUSWINDUAJI';
+
+/* ===== SOAL (contoh, ganti dengan soalmu) =====
+   id harus sama dengan id di KUNCI pada Code.gs.
+   Kunci jawaban TIDAK ditaruh di sini, supaya tidak bisa diintip siswa. */
+const SOAL=[
+ {id:'q1',tipe:'pg',teks:'Ciri surat formal yang tepat adalah…',opsi:['Memakai bahasa santai dan emotikon','Memakai kop surat dan bahasa baku','Ditulis tanpa salam pembuka','Memakai singkatan gaul']},
+ {id:'q2',tipe:'pg',teks:'Surat kepada sahabat untuk bercerita tentang liburan termasuk surat…',opsi:['Nonformal','Dinas','Niaga','Resmi']},
+ {id:'q3',tipe:'pg',teks:'Bagian atas surat resmi yang memuat identitas dan alamat instansi disebut…',opsi:['Salam penutup','Isi surat','Kop surat','Lampiran']},
+ {id:'q4',tipe:'pg',teks:'Salam pembuka yang tepat pada surat formal adalah…',opsi:['Halo, apa kabar?','Hai, Bapak!','Sobat,','Dengan hormat,']},
+ {id:'q5',tipe:'pg',teks:'Pada surat resmi, “Hal” berarti…',opsi:['Alamat penerima','Tanggal surat','Perihal atau pokok isi surat','Lampiran']},
+ {id:'q6',tipe:'pg',teks:'Salam penutup yang tepat pada surat formal adalah…',opsi:['Dadah, sampai jumpa!','Hormat kami,','Peluk cium,','Salam kece,']},
+ {id:'q7',tipe:'pg',teks:'Kalimat pembuka yang cocok untuk surat nonformal adalah…',opsi:['Hai, Rani! Apa kabarmu?','Yth. Bapak Kepala Sekolah','Perihal permohonan izin','Dengan ini kami memberitahukan']},
+ {id:'q8',tipe:'pg',teks:'Singkatan “Yth.” berarti…',opsi:['Yang tertua','Yang tegas','Yang terhormat','Yang terhubung']},
+ {id:'q9',tipe:'pg',teks:'“Dengan hormat, kami mengundang Bapak/Ibu Wali Murid untuk menghadiri rapat…” Kutipan ini berasal dari surat…',opsi:['Nonformal','Kaleng','Pribadi','Formal']},
+ {id:'q10',tipe:'pg',teks:'Pernyataan yang benar tentang surat nonformal adalah…',opsi:['Wajib memakai nomor surat','Tidak boleh ada salam','Bahasanya boleh akrab tetapi tetap sopan','Harus memakai stempel']},
+ {id:'u1',tipe:'uraian',teks:'Tulis dua kalimat pembuka surat undangan rapat dari sekolah untuk wali murid.'}
+];
+
+const SK='literasa_asesmen';
+const $=s=>document.querySelector(s);
+let st=null,idx=0,mengirim=false;
+
+const load=()=>{try{return JSON.parse(localStorage.getItem(SK)||'null')}catch(e){return null}};
+const save=()=>{try{localStorage.setItem(SK,JSON.stringify(st))}catch(e){}};
+const uid=()=>(crypto.randomUUID&&crypto.randomUUID())||Date.now()+'-'+Math.random().toString(36).slice(2);
+function show(id){['gate','quiz','done'].forEach(x=>$('#'+x).hidden=(x!==id));window.scrollTo(0,0)}
+
+/* ---------- status koneksi ---------- */
+function net(){
+  const on=navigator.onLine;
+  $('#net').className='pill'+(on?' on':'');
+  $('#net span').textContent=on?'Terhubung':'Tidak ada internet';
+  $('#mulai').disabled=!on;
+  $('#offmsg').hidden=on;
+  $('#qwarn').hidden=on;
+  if(on&&st&&st.selesai&&!$('#done').hidden&&!mengirim)kirim();
+}
+addEventListener('online',net);
+addEventListener('offline',net);
+
+async function cekServer(){
+  if(!navigator.onLine)return false;
+  const c=new AbortController(),t=setTimeout(()=>c.abort(),8000);
+  try{
+    const r=await fetch(URL_SHEET+'?ping='+Date.now(),{signal:c.signal,cache:'no-store'});
+    const j=await r.json();
+    return !!j.ok;
+  }catch(e){return false}
+  finally{clearTimeout(t)}
+}
+
+/* ---------- mulai ---------- */
+async function mulai(){
+  const nama=$('#nama').value.trim(),kelas=$('#kelas').value.trim().toUpperCase();
+  if(nama.length<3||!kelas){$('#err').textContent='Isi nama lengkap dan kelas dulu.';return}
+  $('#err').textContent='';
+  const b=$('#mulai');b.disabled=true;b.textContent='Memeriksa koneksi…';
+  const ok=await cekServer();
+  b.textContent='Mulai asesmen';b.disabled=!navigator.onLine;
+  if(!ok){$('#err').textContent='Belum bisa terhubung ke server guru. Pastikan internet menyala, lalu coba lagi.';return}
+
+  const lama=load();
+  if(lama&&lama.nama===nama&&lama.kelas===kelas){st=lama}
+  else{st={id:uid(),nama,kelas,mulai:new Date().toISOString(),jawaban:{},selesai:false,idx:0};save()}
+
+  $('#who').textContent=st.nama+' · '+st.kelas;
+  if(st.selesai){show('done');kirim();return}
+  idx=st.idx||0;show('quiz');render();
+}
+$('#mulai').onclick=mulai;
+
+/* ---------- tampil soal ---------- */
+function render(){
+  const q=SOAL[idx];st.idx=idx;save();
+  $('#no').textContent='Soal '+(idx+1)+' dari '+SOAL.length;
+  $('#bar').style.width=((idx+1)/SOAL.length*100)+'%';
+  $('#teks').textContent=q.teks;
+  const box=$('#opsi');box.innerHTML='';
+  if(q.tipe==='pg'){
+    q.opsi.forEach((t,i)=>{
+      const h='ABCD'[i],b=document.createElement('button');
+      b.type='button';b.className='opt'+(st.jawaban[q.id]===h?' sel':'');
+      const k=document.createElement('i'),s=document.createElement('span');
+      k.textContent=h;s.textContent=t;b.append(k,s);
+      b.onclick=()=>{st.jawaban[q.id]=h;save();render()};
+      box.appendChild(b);
+    });
+  }else{
+    const t=document.createElement('textarea');
+    t.rows=5;t.maxLength=600;t.placeholder='Tulis jawabanmu di sini…';t.value=st.jawaban[q.id]||'';
+    t.setAttribute('aria-label','Jawaban uraian');
+    t.oninput=()=>{st.jawaban[q.id]=t.value;save()};
+    box.appendChild(t);
+  }
+  $('#prev').disabled=idx===0;
+  const akhir=idx===SOAL.length-1;
+  $('#next').hidden=akhir;$('#kirim').hidden=!akhir;
+}
+$('#prev').onclick=()=>{if(idx>0){idx--;render()}};
+$('#next').onclick=()=>{if(idx<SOAL.length-1){idx++;render()}};
+
+$('#kirim').onclick=()=>{
+  const kosong=SOAL.filter(q=>!String(st.jawaban[q.id]||'').trim()).length;
+  if(kosong&&!confirm('Masih ada '+kosong+' soal belum dijawab. Tetap kirim?'))return;
+  if(!navigator.onLine){alert('Kamu sedang offline. Sambungkan internet dulu, lalu tekan Selesai dan kirim lagi.');return}
+  st.selesai=true;save();show('done');kirim();
+};
+
+/* ---------- kirim ke guru ---------- */
+async function kirim(){
+  if(mengirim||!st)return;
+  mengirim=true;
+  $('#djudul').textContent='Mengirim jawaban…';
+  $('#dskor').hidden=true;$('#retry').hidden=true;$('#home').hidden=true;
+  $('#dstat').textContent='Jangan tutup halaman ini.';
+  try{
+    const r=await fetch(URL_SHEET,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({secret:SECRET,id:st.id,nama:st.nama,kelas:st.kelas,mulai:st.mulai,jawaban:st.jawaban})
+    });
+    const j=await r.json();
+    if(!j.ok)throw new Error(j.error||'Server menolak data');
+    localStorage.removeItem(SK);
+    $('#djudul').textContent='Nilai terkirim ✅';
+    $('#dskor').textContent=j.skor;$('#dskor').hidden=false;
+    $('#dstat').textContent='Benar '+j.benar+' dari '+j.total+' soal pilihan ganda. Jawaban uraian akan dinilai guru.';
+    $('#home').hidden=false;
+    st=null;
+  }catch(e){
+    $('#djudul').textContent='Belum terkirim';
+    $('#dstat').textContent='Jawabanmu aman tersimpan di perangkat ini. Pastikan internet menyala, lalu tekan Kirim ulang. Jangan hapus data browser. ('+(e.message||'koneksi gagal')+')';
+    $('#retry').hidden=false;
+  }finally{mengirim=false}
+}
+$('#retry').onclick=()=>{if(!navigator.onLine){alert('Internet belum tersambung.');return}kirim()};
+
+/* ---------- cegah tertutup tanpa sengaja ---------- */
+addEventListener('beforeunload',e=>{if(st){e.preventDefault();e.returnValue=''}});
+
+/* ---------- pulihkan sesi yang belum terkirim ---------- */
+(function(){
+  const lama=load();
+  if(lama){$('#nama').value=lama.nama;$('#kelas').value=lama.kelas;
+    $('#err').style.color='var(--ink2)';
+    $('#err').textContent=lama.selesai?'Ada jawaban yang belum terkirim. Tekan Mulai untuk mengirimnya.':'Ada asesmen yang belum selesai. Tekan Mulai untuk melanjutkan.'}
+  net();
+})();
+</script>
+</body>
+</html>
